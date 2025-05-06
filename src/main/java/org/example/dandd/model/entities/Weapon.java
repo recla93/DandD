@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Weapon extends Equipment
 {
 	private int damage;

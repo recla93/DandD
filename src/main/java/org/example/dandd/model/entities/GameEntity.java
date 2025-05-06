@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public abstract class GameEntity extends BaseEntity
+public /* abstract */ class GameEntity extends BaseEntity
 {
 	protected int hp, atk, def, speed;
 	protected String name, description;
@@ -22,4 +22,7 @@ public abstract class GameEntity extends BaseEntity
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "game")
 	private List<Action> actions;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "owner", cascade = CascadeType.ALL)
+	private List<Equipment> equipments;
 }

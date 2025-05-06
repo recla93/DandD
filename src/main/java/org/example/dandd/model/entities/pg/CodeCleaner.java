@@ -14,11 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class CodeCleaner extends GameEntity
 {
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "CodeCleaner", cascade = CascadeType.ALL)
-	private List<Equipment> equipments;
+
 }
