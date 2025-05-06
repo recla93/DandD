@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.dandd.model.entities.Action;
 import org.example.dandd.model.entities.Equipment;
 import org.example.dandd.model.entities.GameEntity;
 
@@ -19,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TroubleShouter extends GameEntity
+public class TroubleShooter extends GameEntity
 {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "TroubleShouter", cascade = CascadeType.ALL)
