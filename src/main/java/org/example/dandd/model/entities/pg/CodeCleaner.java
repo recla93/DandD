@@ -1,9 +1,6 @@
 package org.example.dandd.model.entities.pg;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import org.example.dandd.model.entities.Action;
 import org.example.dandd.model.entities.Equipment;
@@ -16,9 +13,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@DiscriminatorValue("playable")
 public class CodeCleaner extends GameEntity
 {
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "CodeCleaner", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "codecleaner", cascade = CascadeType.ALL)
 	private List<Equipment> equipments;
 }

@@ -1,9 +1,6 @@
 package org.example.dandd.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,17 +15,27 @@ import org.example.dandd.model.entities.enums.ActionType;
 public class Action extends BaseEntity
 {
 	private String nameAction, descriptionAction;
-	private int precision, molt, maxNumTarget, cooldown;
+	@Column(name = "accuracy")
+	private int precision;
+	private int molt, maxNumTarget, cooldown;
 	private ActionType actionType;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_action")
+	@JoinColumn(name = "id_game")
 	private GameEntity game;
 
-	private int dmgCalculation(int def,int atk)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_gameState")
+	private GameState gameState;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_battle")
+	private Battle battle;
+
+	private int dmgCalculation(int def, int atk)
 	{
 		int dmg = atk - def;
-		if(dmg<0)
+		if (dmg < 0)
 			return 0;
 
 		return dmg;

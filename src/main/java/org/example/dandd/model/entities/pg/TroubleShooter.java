@@ -1,9 +1,6 @@
 package org.example.dandd.model.entities.pg;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,10 +14,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@DiscriminatorValue("playable")
 public class TroubleShooter extends GameEntity
 {
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "TroubleShouter", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "troubleshooter", cascade = CascadeType.ALL)
 	private List<Equipment> equipments;
 }
