@@ -12,6 +12,7 @@ import org.example.dandd.model.entities.Action;
 import org.example.dandd.model.entities.Equipment;
 import org.example.dandd.model.entities.GameEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,5 +25,5 @@ public class DataMystic extends GameEntity
 
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "DataMystic", cascade = CascadeType.ALL)
-	private List<Equipment> equipments;
+	private List<Equipment> equipments = new ArrayList<>();
 }

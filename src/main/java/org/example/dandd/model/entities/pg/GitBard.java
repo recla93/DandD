@@ -12,6 +12,7 @@ import org.example.dandd.model.entities.Action;
 import org.example.dandd.model.entities.Equipment;
 import org.example.dandd.model.entities.GameEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,8 +22,6 @@ import java.util.List;
 @Builder
 public class GitBard extends GameEntity
 {
-
-
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "GitBard", cascade = CascadeType.ALL)
-	private List<Equipment> equipments;
+	private List<Equipment> equipments = new ArrayList<>();
 }

@@ -9,6 +9,7 @@ import org.example.dandd.model.entities.Action;
 import org.example.dandd.model.entities.Equipment;
 import org.example.dandd.model.entities.GameEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -20,5 +21,5 @@ import java.util.List;
 public class CodeCleaner extends GameEntity
 {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "CodeCleaner", cascade = CascadeType.ALL)
-	private List<Equipment> equipments;
+	private List<Equipment> equipment = new ArrayList<>();
 }
