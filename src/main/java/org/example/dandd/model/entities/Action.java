@@ -39,7 +39,7 @@ public class Action extends BaseEntity
 		return precision > dice;
 	}
 
-	private int baseDmgCalculation(int def,int atk)
+	public int baseDmgCalculation(int def, int atk)
 	{
 		int dmg = atk - def;
 		if(dmg<0)

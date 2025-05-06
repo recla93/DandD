@@ -54,7 +54,7 @@ public class Test
 
         System.out.println("\nProva Attacco");
 
-        int dannoCalcolato = attaccoBase.dmgCalculation(difensore.getDef(), attaccante.getAtk());
+        int dannoCalcolato = attaccoBase.baseDmgCalculation(difensore.getDef(), attaccante.getAtk());
         System.out.println("Danno: " + dannoCalcolato);
 
         int controlloDannoPrecisione = GameService.precisionCheck(dannoCalcolato, attaccoBase.getPrecision());
