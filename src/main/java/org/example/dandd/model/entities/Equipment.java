@@ -4,12 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.dandd.model.entities.pg.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @AllArgsConstructor
@@ -43,7 +41,6 @@ public class Equipment extends BaseEntity
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_troubleshooter")
 	private TroubleShooter troubleshooter;
-
 
 
 }
