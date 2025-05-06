@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("playable")
+@DiscriminatorValue("infrastructure")
 public class Infrastructure extends GameEntity
 {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "infrastructure", cascade = CascadeType.ALL)

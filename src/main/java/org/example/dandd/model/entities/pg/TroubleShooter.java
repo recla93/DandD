@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("playable")
+@DiscriminatorValue("troubleshooter")
 public class TroubleShooter extends GameEntity
 {
 

@@ -32,10 +32,17 @@ public class Action extends BaseEntity
 	@JoinColumn(name = "id_battle")
 	private Battle battle;
 
-	private int dmgCalculation(int def, int atk)
+	private boolean hit(int def,int atk)
+	{
+		int dice = (int) (Math.random() * 100) + 1;
+
+		return precision > dice;
+	}
+
+	private int baseDmgCalculation(int def,int atk)
 	{
 		int dmg = atk - def;
-		if (dmg < 0)
+		if(dmg<0)
 			return 0;
 
 		return dmg;

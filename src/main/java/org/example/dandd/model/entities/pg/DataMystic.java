@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("playable")
+@DiscriminatorValue("datamystic")
 public class DataMystic extends GameEntity
 {
 

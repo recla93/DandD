@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("playable")
+@DiscriminatorValue("codecleaner")
 public class CodeCleaner extends GameEntity
 {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "codecleaner", cascade = CascadeType.ALL)

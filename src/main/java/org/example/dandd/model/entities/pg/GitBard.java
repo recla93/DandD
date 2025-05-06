@@ -9,13 +9,14 @@ import org.example.dandd.model.entities.Action;
 import org.example.dandd.model.entities.Equipment;
 import org.example.dandd.model.entities.GameEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("playable")
+@DiscriminatorValue("gitbard")
 public class GitBard extends GameEntity
 {
 
