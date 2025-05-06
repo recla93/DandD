@@ -18,11 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Battle extends BaseEntity
 {
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "battle")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "battle", cascade = CascadeType.ALL)
 	private List<GameEntity> gameEntities;
-
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "battle")
-	private List<Action> actions;
-
-
 }
