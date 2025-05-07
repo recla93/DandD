@@ -2,6 +2,7 @@ package org.example.dandd.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.dandd.service.BattleService;
 
 import java.util.List;
 
@@ -22,16 +23,16 @@ public class GameEntity extends BaseEntity
 	 * speed min=10, max=50
 	 */
 	protected int hp, atk, def, speed;
-	protected String name, description;
+	protected String name;
+
+	@Column(columnDefinition = "TEXT")
+	protected String description;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_battle")
-	private Battle battle;
+	private BattleService battleService;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "entity")
 	private List<Action> actions;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_gameState")
-	private GameState gameState;
 }

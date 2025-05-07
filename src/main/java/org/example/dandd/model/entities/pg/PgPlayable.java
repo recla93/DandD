@@ -22,4 +22,5 @@ public class PgPlayable extends GameEntity
 
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "playable",cascade = CascadeType.ALL)
 	private List<Equipment> equipments;
+
 }

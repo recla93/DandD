@@ -35,9 +35,9 @@ public class TestCombat
 
 		while(vitaCloud>0 && vitaJavlin>0)
 		{
-			if(sparo.hit(javlin.getDef(), cloud.getAtk()))
+			if(sparo.hit())
 			{
-				int danno=sparo.baseDmgCalculation(javlin.getDef(), cloud.getAtk());
+				int danno=sparo.dmgCalculator(cloud, javlin);
 				vitaJavlin-=danno;
 				System.out.println("Vita rimasta del javlin "+(vitaJavlin>0?vitaJavlin:0));
 
@@ -49,9 +49,9 @@ public class TestCombat
 
 			}
 
-			if (graffio.hit(cloud.getDef(), javlin.getAtk()))
+			if (graffio.hit())
 			{
-				int danno=graffio.baseDmgCalculation(cloud.getDef(), javlin.getAtk());
+				int danno=graffio.dmgCalculator(javlin,cloud);
 				vitaCloud-=danno;
 				System.out.println("Vita rimasta di Cloud "+(vitaCloud>0?vitaCloud:0));
 
@@ -62,10 +62,6 @@ public class TestCombat
 				}
 			}
 		}
-//		System.out.println("\nStato finale");
-//		System.out.println("Attaccante: " + attaccante.getName() + " (HP: " + attaccante.getHp() + ", ATK: " + attaccante.getAtk() + ")");
-//		System.out.println("Difensore: " + difensore.getName() + " (HP: " + difensore.getHp() + ", ATK: " + difensore.getAtk() + ")");
-//		System.out.println("Azione usata: '" + attaccoBase.getNameAction() + "' (Tipo: " + attaccoBase.getActionType() + ")");
 	}
 }
 
