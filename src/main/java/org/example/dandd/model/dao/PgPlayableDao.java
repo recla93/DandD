@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PgPlayableDao extends JpaRepository<PgPlayable, Long>
 {
+	PgPlayable findByName(String name);
 }

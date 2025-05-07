@@ -18,11 +18,12 @@ public class Action extends BaseEntity
 	@Column(name = "accuracy")
 	private int precision;
 	private int molt, maxNumTarget, cooldown;
+	@Enumerated(EnumType.STRING)
 	private ActionType actionType;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_game")
-	private GameEntity game;
+	@JoinColumn(name = "id_entity")
+	private GameEntity entity;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_gameState")
@@ -32,7 +33,7 @@ public class Action extends BaseEntity
 	@JoinColumn(name = "id_battle")
 	private Battle battle;
 
-	private boolean hit(int def,int atk)
+	public boolean hit(int def,int atk)
 	{
 		int dice = (int) (Math.random() * 100) + 1;
 

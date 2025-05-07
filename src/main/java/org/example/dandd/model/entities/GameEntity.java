@@ -15,6 +15,12 @@ import java.util.List;
 @DiscriminatorColumn(name = "type")
 public class GameEntity extends BaseEntity
 {
+	/**
+	 * Hp min=80, max=200;
+	 * atk min=10, max=50;
+	 * def min=10, max=20;
+	 * speed min=10, max=50
+	 */
 	protected int hp, atk, def, speed;
 	protected String name, description;
 
@@ -22,7 +28,7 @@ public class GameEntity extends BaseEntity
 	@JoinColumn(name = "id_battle")
 	private Battle battle;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "game")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "entity")
 	private List<Action> actions;
 
 	@ManyToOne(fetch = FetchType.LAZY)
