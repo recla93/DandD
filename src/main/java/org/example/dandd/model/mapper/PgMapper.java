@@ -19,7 +19,7 @@ public class PgMapper
 
 	public List<PgDto> toDtos(List<PgPlayable> pgs)
 	{
-		return pgs.stream().map(p->toDto(p)).toList();
+		return pgs.stream().map(p->toDto(p)).collect(Collectors.toList());
 	}
 
 }

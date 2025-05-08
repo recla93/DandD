@@ -21,4 +21,28 @@ public class GameStateDto
 
 	private Long currentEntity;
 
+
+
+	public void substituteGoodTargetHp(Long id, int hp)
+	{
+		PgDto old = good.stream().filter(p->p.id().equals(id)).findFirst().orElse(null);
+		good.set(good.indexOf(old), old.nuoviHp(hp));
+	}
+
+	public void substituteEvilTargetHp(Long id,int hp)
+	{
+		MonsterDto old = evil.stream().filter(p->p.id().equals(id)).findFirst().orElse(null);
+		evil.set(evil.indexOf(old), old.nuoviHp(hp));
+	}
+
+	public int getGoodTargetHp(Long id)
+	{
+		PgDto old = good.stream().filter(p->p.id().equals(id)).findFirst().orElse(null);
+		return old.hp();
+	}
+	public int getEvilTargetHp(Long id)
+	{
+		MonsterDto old = evil.stream().filter(p->p.id().equals(id)).findFirst().orElse(null);
+		return old.hp();
+	}
 }

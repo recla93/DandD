@@ -7,6 +7,7 @@ import org.example.dandd.model.entities.pg.PgPlayable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MonsterMapper
@@ -28,6 +29,6 @@ public class MonsterMapper
 
 	public List<MonsterDto> toDtos(List<Monster> monsters)
 	{
-		return monsters.stream().map(p->toDto(p)).toList();
+		return monsters.stream().map(p->toDto(p)).collect(Collectors.toList());
 	}
 }

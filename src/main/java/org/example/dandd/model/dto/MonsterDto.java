@@ -7,7 +7,7 @@ public record MonsterDto
 				Long id,
 				String name,
 				String description,
-				String Danger,
+				String danger,
 				int hp,
 				int atk,
 				int def,
@@ -15,4 +15,8 @@ public record MonsterDto
 				List<String> actionsName
 		)
 {
+	public MonsterDto nuoviHp(int nuoviHp)
+	{
+		return new MonsterDto(this.id,this.name,this.description,this.danger,nuoviHp,atk,def,spd,actionsName);
+	}
 }

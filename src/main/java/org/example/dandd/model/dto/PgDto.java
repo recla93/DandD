@@ -16,4 +16,8 @@ public record PgDto
 				String enumType
 		)
 {
+	public PgDto nuoviHp(int nuoviHp)
+	{
+		return new PgDto(this.id,this.name,this.description,nuoviHp,this.atk,this.def,this.spd,this.actionsName,equipmentsName,enumType);
+	}
 }

@@ -1,8 +1,12 @@
 package org.example.dandd;
 
+import org.example.dandd.model.dao.ActionDao;
+import org.example.dandd.model.dao.GameEntityDao;
 import org.example.dandd.model.dao.MonsterDao;
 import org.example.dandd.model.dao.PgPlayableDao;
+import org.example.dandd.model.dto.GameStateDto;
 import org.example.dandd.model.entities.Monster;
+import org.example.dandd.model.entities.enums.ActionType;
 import org.example.dandd.model.entities.pg.PgPlayable;
 import org.example.dandd.service.BattleService;
 import org.junit.jupiter.api.Test;
@@ -24,15 +28,23 @@ public class TestOrdinamento
 	@Autowired
 	BattleService battleService;
 
+	@Autowired
+	GameEntityDao gameEntityDao;
+
+	@Autowired
+	ActionDao actionDao;
+
 
 	@Test
 	public void TestOrdinamento()
 	{
 		List<PgPlayable> player = pgPlayableDao.findAll();
-
 		List<Monster> monster = monsterDao.findAll();
+		GameStateDto currentDto = battleService.iniziaFight(player, monster);
 
-		battleService.iniziaFight(player,monster);
+
+		GameStateDto ciccio = battleService.nextTurn(currentDto, 6, ActionType.BASE);
+		battleService.nextTurn(ciccio, 6, ActionType.BASE);
 
 
 	}
