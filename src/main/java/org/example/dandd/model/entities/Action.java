@@ -28,10 +28,6 @@ public class Action extends BaseEntity
 	private GameEntity entity;
 
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_battle")
-	private BattleService battleService;
-
 	public boolean hit()
 	{
 		int dice = (int) (Math.random() * 100) + 1;
