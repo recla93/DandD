@@ -43,8 +43,18 @@ public class TestOrdinamento
 		GameStateDto currentDto = battleService.iniziaFight(player, monster);
 
 
-		GameStateDto ciccio = battleService.nextTurn(currentDto, 6, ActionType.BASE);
-		battleService.nextTurn(ciccio, 6, ActionType.BASE);
+		GameStateDto turn = battleService.nextTurn(currentDto, 6, ActionType.BASE);
+		GameStateDto round = battleService.nextRound(turn);
+		turn=battleService.nextTurn(round, 6, ActionType.BASE);
+		round=battleService.nextRound(turn);
+		turn=battleService.nextTurn(round, 6, ActionType.BASE);
+		round=battleService.nextRound(turn);
+		turn=battleService.nextTurn(round, 6, ActionType.BASE);
+		round=battleService.nextRound(turn);
+		turn=battleService.nextTurn(round, 6, ActionType.BASE);
+		round=battleService.nextRound(turn);
+	;
+
 
 
 	}

@@ -52,6 +52,10 @@ public class BattleService
 	@Autowired
 	GameEntityDao gDao;
 
+	/**
+	 * Il metodo iniziaFight prende in entrata le 2 liste di player e di mostri scelti
+	 * e li unisce in una singola lista per poi restituirla ordinata in base alla statistica spd
+	 * */
 	public GameStateDto iniziaFight(List<PgPlayable> player, List<Monster> mostri)
 	{
 		GameStateDto dto = new GameStateDto();
@@ -62,7 +66,7 @@ public class BattleService
 		List<Long> order = Stream.concat(player.stream(), mostri.stream())
 				.sorted(Comparator.comparingInt(GameEntity::getSpeed).reversed()) // dal più veloce
 				.map(GameEntity::getId)
-				.toList();
+				.collect(Collectors.toList());
 
 
 		dto.setGood(pgDtos);
@@ -75,182 +79,84 @@ public class BattleService
 	}
 
 	/**
-	 * Il metodo NEXTPG è la singola azione del Playeable verso il Mostro
+	 *Il metodo nextTurn prende in entrata il GameState precedente, il targer e il tipo di Azione.
+	 * Gestisce tutta la logica dell'singolo turno.
 	 */
-//	public GameStateDto nextPg(PgPlayable attaccante, Monster target, Action action)
-//	{
-//		PgPlayable player = pdao.findById(attaccante.getId()).orElse(null);
-//		Monster enemies = mdao.findById(target.getId()).orElse(null);
-//		Action move = adao.findByNameAction(action.getNameAction());
-//
-//		int HpRimanenti = enemies.getHp() - move.dmgCalculator(player, enemies);
-//
-//	}
-
 	public GameStateDto nextTurn(GameStateDto previousDto, int targetInList, ActionType action)
 	{
+
 		Long attackersId = previousDto.getCurrentEntity();
 
-		if (attackersId == null)
-		{
-			System.out.println("ERRORE");
-			return previousDto;
-		}
-
 		GameEntity attacker = gDao.findById(attackersId).orElse(null);
-		if (attacker == null)
-		{
-			System.out.println("ATTACKER NULL");
-			return previousDto;
-		}
-
 		GameEntity target = gDao.findById(previousDto.getOrder().get(targetInList)).orElse(null);
-		if (target == null)
-		{
-			System.out.println("TARGET NULL");
-			return previousDto;
-		}
-
 		Optional<Action> chosenAction = attacker.getActions()
 				.stream()
 				.filter(a -> a.getActionType().equals(action))
 				.findFirst();
 
-		if (chosenAction.isEmpty())
-		{
-			System.out.println("CHOSEN ACTION NULL");
-			return previousDto;
-		}
-
 		Action chosen = chosenAction.get();
-
-
-		if( (attacker instanceof PgPlayable && target instanceof PgPlayable) || (attacker instanceof Monster  && target instanceof Monster ) )
-			System.out.println("Non puoi attaccare la stessa GameEntity");
 
 		if( attacker instanceof PgPlayable player && target instanceof Monster monster )
 		{
 			int hpMonster = previousDto.getEvilTargetHp(target.getId())-chosen.dmgCalculator(player, monster);
 			previousDto.substituteEvilTargetHp(target.getId(), hpMonster);
-			System.out.println(attacker.getName() + "ha attaccato " + target.getName()+ "con " + chosen.getNameAction() + "\nVita del mostro rimasta " + hpMonster);
+			if(hpMonster<=0)
+				previousDto.getOrder().remove(monster.getId());
 		}
 		if(attacker instanceof Monster monster && target instanceof PgPlayable player )
 		{
 			int hpPlayer =previousDto.getGoodTargetHp(target.getId()) - chosen.dmgCalculator(monster,player );
 			previousDto.substituteGoodTargetHp(target.getId(), hpPlayer);
-			System.out.println("hpPlayer: " + hpPlayer);
+			if(hpPlayer<=0)
+				previousDto.getOrder().remove(player.getId());
 		}
-
-		if(target.getHp()<=0)
-			previousDto.getOrder().remove(target.getId());
-
-
-
+		System.out.println(previousDto.getOrder());
 		return previousDto;
 
 	}
 
+	/**
+	 *Il metodo nextRound prende in entrata il GameState precedente e manda avanti la Lista di Entity di 1
+	 */
 	public GameStateDto nextRound(GameStateDto currentState)
 	{
-		if (currentState == null || currentState.getCurrentEntity() == null)
-			return currentState;
+		win(currentState);
 
 		List<Long> order = currentState.getOrder();
 		Long currentEntityId = currentState.getCurrentEntity();
 
 		int currentEntityIndex = order.indexOf(currentEntityId);
 
-		if (currentEntityIndex == -1)
-		{
-			System.out.println("Entity non trovata");
-			currentState.setCurrentEntity(order.getFirst());
-			return currentState;
-		}
-
 		int nextEntityIndex = (currentEntityIndex + 1) % order.size();
 		Long nextEntityId = order.get(nextEntityIndex);
 
 		currentState.setCurrentEntity(nextEntityId);
 
-		System.out.println("Prossimo turno: " + nextEntityId);
-
 		return currentState;
 	}
 
-	public GameStateDto applyAction(GameStateDto currentState, String actionName, Long targetId)
+	public void win(GameStateDto currentState)
 	{
-		Long attackersId = currentState.getCurrentEntity();
-		if (attackersId == null)
-		{
-			System.out.println("ERRORE");
-			return currentState;
-		}
+		List<Long> order = currentState.getOrder();
 
-		GameEntity attacker = gDao.findById(attackersId).orElseThrow(); //boh funge
-		if (attacker == null)
-		{
-			System.out.println("ATTACKER NULL");
-			return currentState;
-		}
+		boolean noMonster = order.stream()
+				.map(id -> gDao.findById(id))
+				.filter(optional -> optional.isPresent())
+				.map(optional -> optional.get())
+				.noneMatch(e -> e instanceof Monster);
 
-		GameEntity target = gDao.findById(targetId).orElseThrow();
-		if (target == null)
-		{
-			System.out.println("TARGET NULL");
-			return currentState;
-		}
+		boolean playerAlive = order.stream()
+				.map(id -> gDao.findById(id))
+				.filter(optional -> optional.isPresent())
+				.map(optional -> optional.get())
+				.anyMatch(e -> e instanceof PgPlayable);
 
-		Optional<Action> chosenAction = attacker.getActions()
-				.stream()
-				.filter(a -> a.getNameAction().equalsIgnoreCase(actionName))
-				.findFirst();
-
-		if (chosenAction.isEmpty())
-		{
-			System.out.println("CHOSEN ACTION NULL");
-			return currentState;
-		}
-
-		Action chosen = chosenAction.get();
-
-		System.out.println(attacker.getName() + " usa " + chosen.getNameAction() + " su " + target.getName());
-
-		if (chosen.hit())
-		{
-			System.out.println("A SEGNO");
-			int damageDealt = 0;
-
-			if (attacker instanceof PgPlayable && target instanceof Monster)
-			{
-				damageDealt = chosen.dmgCalculator((PgPlayable) attacker, (Monster) target);
-			}
-			else if (attacker instanceof Monster && target instanceof PgPlayable)
-			{
-				damageDealt = chosen.dmgCalculator((Monster) attacker, (PgPlayable) target);
-			}
-
-			if (damageDealt > 0)
-			{
-				System.out.println("DANNO " + damageDealt);
-				target.setHp(target.getHp() - damageDealt);
-				System.out.println("Vita target " + target.getHp());
-			}
-			else
-				System.out.println("DANNO 0");
-
-			if (target.getHp() <= 0)
-			{
-				target.setHp(0);
-				System.out.println(target.getName() + "È STATO SCONFITTO");
-			}
-
-			System.out.println(target.getName() + " ha " + target.getHp() + " vita");
-		}
-		else
-			System.out.println("MANCATO");
-
-		return currentState;
+		if (noMonster && playerAlive)
+			System.out.println("Hai vinto");
+		else if (!noMonster && !playerAlive)
+			System.out.println("Hai perso");
 	}
+
 
 
 }
