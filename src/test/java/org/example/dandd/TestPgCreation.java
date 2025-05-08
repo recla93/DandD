@@ -33,10 +33,13 @@ public class TestPgCreation
 		@Test
 		public void testDb()
 		{
+			///PG CLAUDIO
 			PgPlayable cla = new PgPlayable();
 			cla.setCharacterType(CharacterType.TROUBLESHOOTER);
 			cla.setName("Cloud Constantine");
-			cla.setDescription("Un cecchino infallibile.");
+			cla.setDescription("Un cecchino infallibile, armato del suo fido fucile 4NGUL4R," +
+					" è pronto a sterminare le orde di bug. Vive per il brivido di premere il grilletto," +
+					" e ha già un proiettile con un nome inciso: Bug Abissale. Un colpo, un morto.");
 			cla.setHp(80);
 			cla.setAtk(30);
 			cla.setDef(15);
@@ -60,6 +63,7 @@ public class TestPgCreation
 			sparoBase.setEntity(cla);
 			aDao.save(sparoBase);
 
+			///MOSTRO JAVLIN
 			Monster javlin  = new Monster();
 			javlin.setName("Javlin");
 			javlin.setDescription("Un essere infimo e schifoso fatto di codici mai finiti ed errori mai letti carattere per carattere.");
@@ -78,10 +82,14 @@ public class TestPgCreation
 			graffioBase.setEntity(mDao.findByName("Javlin"));
 			aDao.save(graffioBase);
 
+			///PG VINCENZO
+
 			PgPlayable V = new PgPlayable();
 			V.setCharacterType(CharacterType.CODETHIEF);
 			V.setName("V Alphamale");
-			V.setDescription("Un'ombra nel codice.");
+			V.setDescription("Un'ombra nel codice, era lì un minuto fa, non hai refreshato la pagina, dov'è finito? Molto semplice, dietro di te. " +
+					" Il Code Thief è un abile assassino di bug, una presenza invisibile che colpisce con precisione chirurgica e quando meno te l'aspetti." +
+					" Armato dei suoi due pugnali INT e DOUBLE, attacca dall'ombra, approfittando della minima distrazione dei bug per ripulire il codice.");
 			V.setHp(120);
 			V.setAtk(25);
 			V.setDef(15);
@@ -113,12 +121,14 @@ public class TestPgCreation
 			stab.setEntity(V);
 			aDao.save(stab);
 
-			/// Prossimo Fra
+			///PG FRANCESCO
 
 			PgPlayable fra = new PgPlayable();
 			fra.setCharacterType(CharacterType.INFRASTRUCTURE);
 			fra.setName("Heimdall");
-			fra.setDescription("Il guardiano dei Vendicatori.");
+			fra.setDescription("Il guardiano dei Vendicatori, un muro invalicabile. Equipaggiato con il suo enorme scudo PROTECTED, " +
+					"è il muro contro cui s'infrange l'oscurità, difensore del gruppo.\n" +
+					"Se i bug vogliono raggiungere i suoi compagni, avranno bisogno di molta, molta fortuna. Di qui non si passa.");
 			fra.setHp(160);
 			fra.setAtk(15);
 			fra.setDef(20);
@@ -142,12 +152,15 @@ public class TestPgCreation
 			punch.setEntity(fra);
 			aDao.save(punch);
 
-			//Prossimo Edo
+			///PG EDOARDO
 
 			PgPlayable edo = new PgPlayable();
 			edo.setCharacterType(CharacterType.DATAMYSTIC);
 			edo.setName("Skibidi Sanni (ajo)");
-			edo.setDescription("Una misteriosa figura incappucciata, il volto mai visibile.");
+			edo.setDescription("Una misteriosa figura incappucciata, il volto mai visibile. " +
+					"Nessuno sa chi sia, possiede solo la sua tunica e il suo leggendario Grimorio,  REPOSITORY." +
+					" Lanciando palle di fuoco digitali, stringhe di codice e beans da spring, " +
+					"devasta il campo da battaglia con i suoi attacchi ad area distruttivi. Il Bug Abissale non ha speranze.");
 			edo.setHp(80);
 			edo.setAtk(30);
 			edo.setDef(12);
@@ -171,12 +184,14 @@ public class TestPgCreation
 			dataBolt.setEntity(edo);
 			aDao.save(dataBolt);
 
-			//Prossimo Veronico
+			///PG VERONICA
 
 			PgPlayable vero = new PgPlayable();
 			vero.setCharacterType(CharacterType.GITBARD);
 			vero.setName("Debug Her");
-			vero.setDescription("Mai visto dei bug corrotti ballare distrattamente mentre vengono decimati?.");
+			vero.setDescription("Mai visto dei bug corrotti ballare distrattamente mentre vengono decimati? " +
+					"Ora li hai visti. La GitBard, con il suono soave del suo flauto ANNOTATION riesce a controllare la mente dei nemici per breve tempo," +
+					" dominando il campo di battaglia e consentendo ai suoi compagni di fare piazza pulita.");
 			vero.setHp(130);
 			vero.setAtk(15);
 			vero.setDef(15);
@@ -200,12 +215,14 @@ public class TestPgCreation
 			nota.setEntity(vero);
 			aDao.save(nota);
 
-			//Prossimo Sandro
+			///PG SANDRO
 
 			PgPlayable sandro = new PgPlayable();
 			sandro.setCharacterType(CharacterType.CODECLEANER);
 			sandro.setName("Sandor Monster");
-			sandro.setDescription("Il leggendario Decimatore di Bug.");
+			sandro.setDescription("Il leggendario Decimatore di Bug, si dice che abbia camminato nell'abisso del codice Zoom e ne sia uscito indenne, " +
+					"impugnando solo il suo spadone REFACTOR. Con solo ampi fendenti, e il suo giuramento di eliminare ogni sviluppatore Zoom dalla rete," +
+					" è pronto ad affrontare le armate del Bug Abissale.");
 			sandro.setHp(120);
 			sandro.setAtk(25);
 			sandro.setDef(17);

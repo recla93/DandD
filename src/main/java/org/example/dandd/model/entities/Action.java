@@ -43,7 +43,7 @@ public class Action extends BaseEntity
 		{
 			case BASE ->
 			{
-				dmg= p.getAtk()-m.getDef();
+				dmg= p.getAtk();
 			}
 			case HEAVY ->
 			{
@@ -51,40 +51,48 @@ public class Action extends BaseEntity
 			}
 			case SPECIALE ->
 			{
-				//TODO da definire i vari attacchi speciali
 				switch (p.getCharacterType())
 				{
 					case CODECLEANER ->
 					{
-						dmg= p.getAtk()-m.getDef();
+						/// CON PRECISIONE BASSISSIMA SE HITTA UCCIDE LA QUALSIASI
+						dmg=1000;
+
 					}
 					case CODETHIEF ->
 					{
-						dmg= p.getAtk()-m.getDef();
+						/// DOVREBBE FARE TANTI DANNI AD UN SOLO TARGET
+						dmg = p.getAtk() + p.getEquipments().stream().mapToInt(arma->arma.getPlusDmg()).sum() * molt;
 					}
 					case DATAMYSTIC ->
 					{
-						dmg= p.getAtk()-m.getDef();
+						/// DOVREBBE FARE TANTI DANNI A PIù TARGET CON COOLDOWN SUPERIORE
+						dmg = p.getAtk() + p.getEquipments().stream().mapToInt(arma->arma.getPlusDmg()).sum() * molt;
+
 					}
 					case GITBARD ->
 					{
+						/// DOVREBBE CURARE UN TARGET
 						dmg=-20;
 					}
 					case INFRASTRUCTURE ->
 					{
-						dmg= p.getAtk()-m.getDef();
+						/// LA DIFESA DIVENTA L'ATTACCO
+						dmg= p.getDef() + p.getEquipments().stream().mapToInt(arma->arma.getPlusDef()).sum()*molt;
 					}
 					case TROUBLESHOOTER ->
 					{
-						dmg= p.getAtk()-m.getDef();
+						/// 2 TARGET CON DANNI
+						dmg = p.getAtk() + p.getEquipments().stream().mapToInt(arma->arma.getPlusDmg()).sum() * molt;
 					}
 				}
 			}
 		}
 
 
-		return dmg;
+		return dmg - m.getDef();
 	}
+
 
 	public int dmgCalculator(Monster m, PgPlayable p)
 	{
