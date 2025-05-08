@@ -28,9 +28,6 @@ public class GameEntity extends BaseEntity
 	@Column(columnDefinition = "TEXT")
 	protected String description;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_battle")
-	private BattleService battleService;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "entity")
 	private List<Action> actions;

@@ -25,6 +25,9 @@ public class TestCombat
 	@Test
 	void testCombat()
 	{
+
+
+
 		PgPlayable cloud = pDao.findByName("Cloud Constantine");
 		Monster javlin= mDao.findByName("Javlin");
 		Action sparo= aDao.findByNameAction("Sparo");
