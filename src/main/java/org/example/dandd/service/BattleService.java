@@ -1,12 +1,7 @@
 package org.example.dandd.service;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.example.dandd.model.dao.ActionDao;
 import org.example.dandd.model.dao.GameEntityDao;
@@ -16,7 +11,6 @@ import org.example.dandd.model.dto.GameStateDto;
 import org.example.dandd.model.dto.MonsterDto;
 import org.example.dandd.model.dto.PgDto;
 import org.example.dandd.model.entities.Action;
-import org.example.dandd.model.entities.BaseEntity;
 import org.example.dandd.model.entities.GameEntity;
 import org.example.dandd.model.entities.Monster;
 import org.example.dandd.model.entities.enums.ActionType;
@@ -120,7 +114,7 @@ public class BattleService
 	 */
 	public GameStateDto nextRound(GameStateDto currentState)
 	{
-		win(currentState);
+		battleOver(currentState);
 
 		List<Long> order = currentState.getOrder();
 		Long currentEntityId = currentState.getCurrentEntity();
@@ -135,7 +129,7 @@ public class BattleService
 		return currentState;
 	}
 
-	public void win(GameStateDto currentState)
+	public void battleOver(GameStateDto currentState)
 	{
 		List<Long> order = currentState.getOrder();
 
