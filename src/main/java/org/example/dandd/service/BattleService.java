@@ -95,14 +95,20 @@ public class BattleService
 			int hpMonster = previousDto.getEvilTargetHp(target.getId())-chosen.dmgCalculator(player, monster);
 			previousDto.substituteEvilTargetHp(target.getId(), hpMonster);
 			if(hpMonster<=0)
+			{
+				System.out.println("È morto il mostro "+ monster.getId());
 				previousDto.getOrder().remove(monster.getId());
+			}
 		}
 		if(attacker instanceof Monster monster && target instanceof PgPlayable player )
 		{
 			int hpPlayer =previousDto.getGoodTargetHp(target.getId()) - chosen.dmgCalculator(monster,player );
 			previousDto.substituteGoodTargetHp(target.getId(), hpPlayer);
 			if(hpPlayer<=0)
+			{
+				System.out.println("È morto il personaggio "+ player.getId());
 				previousDto.getOrder().remove(player.getId());
+			}
 		}
 		System.out.println(previousDto.getOrder());
 		return previousDto;
@@ -129,29 +135,50 @@ public class BattleService
 		return currentState;
 	}
 
-	public void battleOver(GameStateDto currentState)
+	public String battleOver(GameStateDto currentState)
 	{
 		List<Long> order = currentState.getOrder();
 
 		boolean noMonster = order.stream()
-				.map(id -> gDao.findById(id))
-				.filter(optional -> optional.isPresent())
-				.map(optional -> optional.get())
+				.map(gDao::findById)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
 				.noneMatch(e -> e instanceof Monster);
 
 		boolean playerAlive = order.stream()
-				.map(id -> gDao.findById(id))
-				.filter(optional -> optional.isPresent())
-				.map(optional -> optional.get())
+				.map(gDao::findById)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
 				.anyMatch(e -> e instanceof PgPlayable);
 
 		if (noMonster && playerAlive)
-			System.out.println("Hai vinto");
+			return "Hai vinto";
 		else if (!noMonster && !playerAlive)
-			System.out.println("Hai perso");
+			return "Hai perso";
+		else
+			return "La battaglia è ancora in corso";
 	}
 
-
+//	public GameStateDto nextRound2(GameStateDto currentState)
+//	{
+//		if (battleOver(currentState).equals("Hai vinto") || battleOver(currentState).equals("Hai perso"))
+//		{
+//
+//
+//		}
+//
+//		List<Long> order = currentState.getOrder();
+//		Long currentEntityId = currentState.getCurrentEntity();
+//
+//		int currentEntityIndex = order.indexOf(currentEntityId);
+//
+//		int nextEntityIndex = (currentEntityIndex + 1) % order.size();
+//		Long nextEntityId = order.get(nextEntityIndex);
+//
+//		currentState.setCurrentEntity(nextEntityId);
+//
+//		return currentState;
+//	}
 
 }
 
