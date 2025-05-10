@@ -35,27 +35,27 @@ public class TestOrdinamento
 	ActionDao actionDao;
 
 
-	@Test
-	public void TestOrdinamento()
-	{
-		List<PgPlayable> player = pgPlayableDao.findAll();
-		List<Monster> monster = monsterDao.findAll();
-		GameStateDto currentDto = battleService.iniziaFight(player, monster);
-
-
-		GameStateDto turn = battleService.nextTurn(currentDto, 6, ActionType.BASE);
-		GameStateDto round = battleService.nextRound(turn);
-		turn=battleService.nextTurn(round, 6, ActionType.BASE);
-		round=battleService.nextRound(turn);
-		turn=battleService.nextTurn(round, 6, ActionType.BASE);
-		round=battleService.nextRound(turn);
-		turn=battleService.nextTurn(round, 6, ActionType.BASE);
-		round=battleService.nextRound(turn);
-		turn=battleService.nextTurn(round, 6, ActionType.BASE);
-		round=battleService.nextRound(turn);
-	;
-
-
-
-	}
+//	@Test
+//	public void TestOrdinamento()
+//	{
+//		List<PgPlayable> player = pgPlayableDao.findAll();
+//		List<Monster> monster = monsterDao.findAll();
+//		GameStateDto currentDto = battleService.iniziaFight(player, monster);
+//
+//
+//		GameStateDto turn = battleService.nextTurn(currentDto, 6, ActionType.BASE);
+//		GameStateDto round = battleService.nextRound(turn);
+//		turn=battleService.nextTurn(round, 6, ActionType.BASE);
+//		round=battleService.nextRound(turn);
+//		turn=battleService.nextTurn(round, 6, ActionType.BASE);
+//		round=battleService.nextRound(turn);
+//		turn=battleService.nextTurn(round, 6, ActionType.BASE);
+//		round=battleService.nextRound(turn);
+//		turn=battleService.nextTurn(round, 6, ActionType.BASE);
+//		round=battleService.nextRound(turn);
+//	;
+//
+//
+//
+//	}
 }

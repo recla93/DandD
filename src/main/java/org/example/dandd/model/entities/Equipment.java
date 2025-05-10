@@ -14,6 +14,7 @@ import org.example.dandd.model.entities.pg.*;
 public class Equipment extends BaseEntity
 {
 	private String name;
+	@Column(columnDefinition = "TEXT")
 	private String description;
 	private int plusDmg;
 	private int plusDef;

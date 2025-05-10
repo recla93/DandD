@@ -40,7 +40,7 @@ public class TestCombat
 		{
 			if(sparo.hit())
 			{
-				int danno=sparo.dmgCalculator(cloud, javlin);
+				double danno=sparo.dmgCalculator(cloud, javlin);
 				vitaJavlin-=danno;
 				System.out.println("Vita rimasta del javlin "+(vitaJavlin>0?vitaJavlin:0));
 
@@ -54,7 +54,7 @@ public class TestCombat
 
 			if (graffio.hit())
 			{
-				int danno=graffio.dmgCalculator(javlin,cloud);
+				double danno=graffio.dmgCalculator(javlin,cloud);
 				vitaCloud-=danno;
 				System.out.println("Vita rimasta di Cloud "+(vitaCloud>0?vitaCloud:0));
 
