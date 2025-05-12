@@ -114,6 +114,7 @@ public class BattleService
 				.findFirst()
 				.orElseThrow(() -> new IllegalStateException("Azione non trovata"));
 
+		/// CAPISCE SE IL PG PUÒ PRENDERE O NO PIÙ TARGET
 		if (actionType.equals(ActionType.SPECIALE))
 		{
 			for (GameEntity g : targetList)
