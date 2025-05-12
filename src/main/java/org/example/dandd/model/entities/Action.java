@@ -110,8 +110,7 @@ public class Action extends BaseEntity {
 		if (attaccante instanceof Monster m && difensore instanceof PgPlayable p) {
 			switch (actionType) {
 				case BASE -> dmg = m.getAtk();
-				case HEAVY -> dmg = m.getAtk() * molt;
-				case SPECIALE -> dmg = m.getAtk() * (m.getAtk() + molt);
+				case SPECIALE -> dmg = (m.getAtk() + m.getAtk()) * molt;
 			}
 			return (int) Math.round(dmg - p.getDef());
 		}
