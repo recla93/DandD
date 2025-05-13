@@ -37,7 +37,7 @@ public class TestPgCreation
 		// --- PG Cloud Constantine (Troubleshooter) ---
 		PgPlayable cloudPg = new PgPlayable();
 		cloudPg.setCharacterType(CharacterType.TROUBLESHOOTER);
-		cloudPg.setName("Cloud Constantine");
+		cloudPg.setName("Cloud Constant");
 		cloudPg.setDescription("Un cecchino infallibile, armato del suo fido fucile 4NGUL4R," +
 				" è pronto a sterminare le orde di bug. Vive per il brivido di premere il grilletto," +
 				" e ha già un proiettile con un nome inciso: Bug Abissale. Un colpo, un morto.");
