@@ -167,73 +167,73 @@ public class TestPgCreation
 		aDao.save(vSpecialAtk);
 
 		// --- PG Heimdall (Infrastructure) ---
-		PgPlayable heimendallPg = new PgPlayable();
-		heimendallPg.setCharacterType(CharacterType.INFRASTRUCTURE);
-		heimendallPg.setName("Heimdall");
-		heimendallPg.setDescription("Il guardiano dei Vendicatori, un muro invalicabile. Equipaggiato con il suo enorme scudo PROTECTED, " +
+		PgPlayable heimdallPg = new PgPlayable();
+		heimdallPg.setCharacterType(CharacterType.INFRASTRUCTURE);
+		heimdallPg.setName("Heimdall");
+		heimdallPg.setDescription("Il guardiano dei Vendicatori, un muro invalicabile. Equipaggiato con il suo enorme scudo PROTECTED, " +
 				"è il muro contro cui s'infrange l'oscurità, difensore del gruppo.\n" +
 				"Se i bug vogliono raggiungere i suoi compagni, avranno bisogno di molta, molta fortuna. Di qui non si passa.");
-		heimendallPg.setHp(160);
-		heimendallPg.setAtk(15);
-		heimendallPg.setDef(25);
-		heimendallPg.setSpeed(10);
-		// heimendallPg.setImageUrl("URL_PER_HEIMDALL"); // Aggiungere URL se disponibile
-		pDao.save(heimendallPg);
+		heimdallPg.setHp(160);
+		heimdallPg.setAtk(15);
+		heimdallPg.setDef(25);
+		heimdallPg.setSpeed(10);
+		heimdallPg.setImageUrl("https://i.imgur.com/qljpjPH.png"); // URL Heimdall
+		pDao.save(heimdallPg);
 
-		Equipment heimendallWeaponF  = new Equipment();
-		heimendallWeaponF.setEquipmentType(EquipmentType.SHIELD);
-		heimendallWeaponF.setName("EGIDA DI STEFANO");
-		heimendallWeaponF.setDescription("L'Egida di Stefano non è solo uno scudo, è un legame sacro che respinge ogni minaccia." +
+		Equipment heimdallWeaponF  = new Equipment();
+		heimdallWeaponF.setEquipmentType(EquipmentType.SHIELD);
+		heimdallWeaponF.setName("EGIDA DI STEFANO");
+		heimdallWeaponF.setDescription("L'Egida di Stefano non è solo uno scudo, è un legame sacro che respinge ogni minaccia." +
 				"\nCreato per difendere i più vulnerabili, questo scudo resiste all'impossibile.\n" +
 				"Ogni colpo che lo colpisce si infrange come un'eccezione non gestita, lasciando il nemico senza via di fuga. " +
 				"\nL'oscurità si schianta contro questa muraglia, incapace di oltrepassarla.");
-		heimendallWeaponF.setPlayable(heimendallPg);
-		heimendallWeaponF.setPlusDef(5);
-		eDao.save(heimendallWeaponF);
+		heimdallWeaponF.setPlayable(heimdallPg);
+		heimdallWeaponF.setPlusDef(5);
+		eDao.save(heimdallWeaponF);
 
 
 		Equipment heimdallWeaponS  = new Equipment();
 		heimdallWeaponS.setEquipmentType(EquipmentType.WEAPON);
 		heimdallWeaponS.setName("NULL POINTER KNUCKLES");
 		heimdallWeaponS.setDescription("DA FARE");
-		heimdallWeaponS.setPlayable(heimendallPg);
+		heimdallWeaponS.setPlayable(heimdallPg);
 		heimdallWeaponS.setPlusDmg(10);
 		eDao.save(heimdallWeaponS);
 
-		Action heimendallBaseAtk = new Action();
-		heimendallBaseAtk.setNameAction("Pugno del Commit");
-		heimendallBaseAtk.setDescriptionAction("Heimdall lancia un colpo tanto preciso quanto definitivo, come un commit che salva definitivamente lo stato del codice.\n" +
+		Action heimdallBaseAtk = new Action();
+		heimdallBaseAtk.setNameAction("Pugno del Commit");
+		heimdallBaseAtk.setDescriptionAction("Heimdall lancia un colpo tanto preciso quanto definitivo, come un commit che salva definitivamente lo stato del codice.\n" +
 				"Il bug non ha possibilità di sfuggire, poiché ogni movimento viene bloccato da un controllo seherPg." +
 				"\nÈ un attacco che applica un rollback istantaneo all'errore, eliminandolo dalla memoria e riportando il codice al suo stato originario, privo di difetti.");
-		heimendallBaseAtk.setMaxNumTarget(1);
-		heimendallBaseAtk.setActionType(ActionType.BASE);
-		heimendallBaseAtk.setPrecision(100);
-		heimendallBaseAtk.setEntity(heimendallPg);
-		aDao.save(heimendallBaseAtk);
+		heimdallBaseAtk.setMaxNumTarget(1);
+		heimdallBaseAtk.setActionType(ActionType.BASE);
+		heimdallBaseAtk.setPrecision(100);
+		heimdallBaseAtk.setEntity(heimdallPg);
+		aDao.save(heimdallBaseAtk);
 
-		Action heimendallHeavyAtk = new Action();
-		heimendallHeavyAtk.setNameAction("Refactor del Muro");
-		heimendallHeavyAtk.setDescriptionAction("Heimdall non si accontenta di fermare i bug, li ristruttura nel loro stato di caos. Con il suo potere, effettua un refactor totale del codice avversario, smontando ogni linea di errore, eliminando i nodi difettosi e ripristinando il sistema ad uno stato perfetto.\n" +
+		Action heimdallHeavyAtk = new Action();
+		heimdallHeavyAtk.setNameAction("Refactor del Muro");
+		heimdallHeavyAtk.setDescriptionAction("Heimdall non si accontenta di fermare i bug, li ristruttura nel loro stato di caos. Con il suo potere, effettua un refactor totale del codice avversario, smontando ogni linea di errore, eliminando i nodi difettosi e ripristinando il sistema ad uno stato perfetto.\n" +
 				"Il bug subisce un ciclo di vita che si interrompe in una build fallita, incapace di rimanere nel sistema." +
 				"\nUn attacco che ripulisce e ripristina.");
-		heimendallHeavyAtk.setMaxNumTarget(1);
-		heimendallHeavyAtk.setActionType(ActionType.HEAVY);
-		heimendallHeavyAtk.setPrecision(90);
-		heimendallHeavyAtk.setEntity(heimendallPg);
-		aDao.save(heimendallHeavyAtk);
+		heimdallHeavyAtk.setMaxNumTarget(1);
+		heimdallHeavyAtk.setActionType(ActionType.HEAVY);
+		heimdallHeavyAtk.setPrecision(90);
+		heimdallHeavyAtk.setEntity(heimdallPg);
+		aDao.save(heimdallHeavyAtk);
 
-		Action heimendallSpecialAtk = new Action();
-		heimendallSpecialAtk.setNameAction("Purge del Codice");
-		heimendallSpecialAtk.setDescriptionAction("Heimdall invoca il purge definitivo, dove ogni bit di codice difettoso viene eliminato in un colpo solo. L’errore è cancellato completamente dalla memoria, proprio come se fosse stato rimosso da Git.\n" +
+		Action heimdallSpecialAtk = new Action();
+		heimdallSpecialAtk.setNameAction("Purge del Codice");
+		heimdallSpecialAtk.setDescriptionAction("Heimdall invoca il purge definitivo, dove ogni bit di codice difettoso viene eliminato in un colpo solo. L’errore è cancellato completamente dalla memoria, proprio come se fosse stato rimosso da Git.\n" +
 				"In questo attacco, il bug non ha via di scampo: viene rimosso dal codice e il sistema si ripristina, perfetto come il primo commit." +
 				"\nUn attacco che ripulisce e ripristina.");
-		heimendallSpecialAtk.setMaxNumTarget(1);
-		heimendallSpecialAtk.setActionType(ActionType.SPECIALE);
-		heimendallSpecialAtk.setCooldown(1);
-		heimendallSpecialAtk.setMolt(1.5);
-		heimendallSpecialAtk.setPrecision(100);
-		heimendallSpecialAtk.setEntity(heimendallPg);
-		aDao.save(heimendallSpecialAtk);
+		heimdallSpecialAtk.setMaxNumTarget(1);
+		heimdallSpecialAtk.setActionType(ActionType.SPECIALE);
+		heimdallSpecialAtk.setCooldown(1);
+		heimdallSpecialAtk.setMolt(1.5);
+		heimdallSpecialAtk.setPrecision(100);
+		heimdallSpecialAtk.setEntity(heimdallPg);
+		aDao.save(heimdallSpecialAtk);
 
 		// --- PG Skibidi Sanni (DataMystic) ---
 		PgPlayable sanniPg = new PgPlayable();
@@ -247,7 +247,7 @@ public class TestPgCreation
 		sanniPg.setAtk(20);
 		sanniPg.setDef(12);
 		sanniPg.setSpeed(20);
-		// sanniPg.setImageUrl("URL_PER_SANNI"); // Aggiungere URL se disponibile
+		sanniPg.setImageUrl("https://i.imgur.com/zMoFpRa.png"); // URL SkibidiSanni
 		pDao.save(sanniPg);
 
 		Equipment sanniWeaponF  = new Equipment();
@@ -308,7 +308,7 @@ public class TestPgCreation
 		herPg.setAtk(15);
 		herPg.setDef(15);
 		herPg.setSpeed(20);
-		// herPg.setImageUrl("URL_PER_HER"); // Aggiungere URL se disponibile
+		herPg.setImageUrl("https://i.imgur.com/qbVzjEL.png"); // URL DebugHer
 		pDao.save(herPg);
 
 		Equipment herWeaponF  = new Equipment();
@@ -367,7 +367,7 @@ public class TestPgCreation
 		sandorPg.setAtk(25);
 		sandorPg.setDef(17);
 		sandorPg.setSpeed(20);
-		// sandorPg.setImageUrl("URL_PER_SANDOR"); // Aggiungere URL se disponibile
+		sandorPg.setImageUrl("https://i.imgur.com/nbwlqLP.png"); // URL CodeCleaner
 		pDao.save(sandorPg);
 
 		Equipment sandorWeaponF  = new Equipment();
@@ -522,7 +522,7 @@ public class TestPgCreation
 		backEnder.setAtk(40);
 		backEnder.setDef(14);
 		backEnder.setSpeed(30);
-		// backEnder.setImageUrl("URL_PER_BACKENDER"); // Aggiungere URL se disponibile
+		backEnder.setImageUrl("https://i.imgur.com/vkoBPs9.png"); // URL Back-Ender
 		mDao.save(backEnder);
 
 		Action baseBack= new Action();
