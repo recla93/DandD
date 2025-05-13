@@ -3,8 +3,6 @@ package org.example.dandd.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import org.example.dandd.model.dao.ActionDao;
 import org.example.dandd.model.dao.GameEntityDao;
 import org.example.dandd.model.dao.MonsterDao;
 import org.example.dandd.model.dao.PgPlayableDao;
@@ -30,8 +28,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 @NoArgsConstructor
 @Service
-public class BattleService
-{
+public class BattleService {
 	@Autowired
 	PgPlayableDao pdao;
 	@Autowired
@@ -43,27 +40,20 @@ public class BattleService
 	MonsterMapper monsterMapper;
 
 	@Autowired
-	ActionDao adao;
-
-	@Autowired
 	GameEntityDao gDao;
 
-	/**
-	 * Il metodo iniziaFight prende in entrata le 2 liste di player e di mostri scelti
-	 * e li unisce in una singola lista per poi restituirla ordinata in base alla statistica spd
-	 */
-	public GameStateDto iniziaFight(List<PgPlayable> player, List<Monster> mostri)
-	{
+	private static final Random random = new Random();
+
+	public GameStateDto iniziaFight(List<PgPlayable> player, List<Monster> mostri) {
 		GameStateDto dto = new GameStateDto();
 
 		List<PgDto> pgDtos = pgMapper.toDtos(player);
 		List<MonsterDto> monsterDtos = monsterMapper.toDtos(mostri);
 
 		List<Long> order = Stream.concat(player.stream(), mostri.stream())
-				.sorted(Comparator.comparingInt(GameEntity::getSpeed).reversed()) // dal più veloce
+				.sorted(Comparator.comparingInt(GameEntity::getSpeed).reversed())
 				.map(GameEntity::getId)
 				.collect(Collectors.toList());
-
 
 		dto.setGood(pgDtos);
 		dto.setEvil(monsterDtos);
@@ -74,450 +64,177 @@ public class BattleService
 		return dto;
 	}
 
-	/**
-	 * Gestisce la logica di un singolo turno di combattimento.
-	 * <p>
-	 * Il metodo prende in ingresso lo stato di gioco precedente, la posizione del bersaglio
-	 * nella lista d'ordine e il tipo di azione da compiere.
-	 * In base al tipo di entità (giocatore o mostro) e all'azione selezionata, calcola l'effetto dell'azione
-	 * (danno o cura) e aggiorna i punti vita del bersaglio.
-	 * <p>
-	 * Se l'azione è effettuata da un {@code PgPlayable} di tipo {@code GITBARD} contro un altro
-	 * {@code PgPlayable}, e l'azione è di tipo {@code SPECIALE}, l'effetto dell'azione sarà la cura.
-	 * In questo caso, il danno calcolato dall'azione deve essere un valore negativo, che sarà invertito per aumentare gli HP.
-	 * <p>
-	 * Se i punti vita del bersaglio scendono a zero, viene rimosso dall'ordine del turno.
-	 *
-	 * @param previousDto  Lo stato del gioco prima dell'esecuzione del turno, contenente le entità,
-	 *                     i loro HP e l'ordine di attivazione.
-	 * @param targetInList L'indice del bersaglio nella lista d'ordine.
-	 * @param actionType   Il tipo di azione da eseguire: BASE, HEAVY o SPECIALE.
-	 * @return Un oggetto {@link GameStateDto} aggiornato con gli effetti dell'azione applicata.
-	 * @throws IllegalStateException se non vengono trovati l'attaccante, il bersaglio o l'azione.
-	 */
-	public GameStateDto nextTurn(GameStateDto previousDto, List<Long> targetInList, ActionType actionType)
-	{
-		/// Ottieni l'id dell'attaccante
+	public GameStateDto nextTurn(GameStateDto previousDto, List<Long> targetIdsFromRequest, ActionType actionTypeFromRequest) {
 		Long attackerId = previousDto.getCurrentEntity();
+		GameEntity attacker = gDao.findById(attackerId)
+				.orElseThrow(() -> new IllegalStateException("Attaccante non trovato con ID: " + attackerId));
 
+		Action selectedAction;
+		List<GameEntity> actualTargets = new ArrayList<>();
 
-		///  Restituisce le entità effettive e controlla se esistono
-		GameEntity attacker = gDao.findById(attackerId).orElseThrow(() -> new IllegalStateException("Attaccante non trovato"));
-		List<GameEntity> targetList = gDao.findAllById(targetInList);
+		if (attacker instanceof Monster currentMonster) {
+			if (currentMonster.getActions() == null || currentMonster.getActions().isEmpty()) {
+				throw new IllegalStateException("Il mostro " + currentMonster.getName() + " non ha azioni definite!");
+			}
+			selectedAction = currentMonster.getActions().get(random.nextInt(currentMonster.getActions().size()));
 
-//		for (Long target : targetInList)
-//			targetList.add(gDao.findById(targetInList).orElseThrow(() -> new IllegalStateException("Target non trovato")));
+			List<PgDto> alivePgs = previousDto.getGood().stream()
+					.filter(pg -> pg.hp() > 0)
+					.collect(Collectors.toList());
 
-		/// Cerca l'azione in base al tipo
-		Action action = attacker.getActions().stream()
-				.filter(a -> a.getActionType().equals(actionType))
-				.findFirst()
-				.orElseThrow(() -> new IllegalStateException("Azione non trovata"));
+			if (alivePgs.isEmpty()) {
+				return previousDto;
+			}
+			PgDto targetPgDto = alivePgs.get(random.nextInt(alivePgs.size()));
+			GameEntity targetPgEntity = gDao.findById(targetPgDto.id())
+					.orElseThrow(() -> new IllegalStateException("PG bersaglio (ID: " + targetPgDto.id() + ") non trovato per l'IA del mostro."));
+			actualTargets.add(targetPgEntity);
 
-		/// CAPISCE SE IL PG PUÒ PRENDERE O NO PIÙ TARGET
-		if (actionType.equals(ActionType.SPECIALE))
-		{
-			for (GameEntity g : targetList)
-			{
-				if (targetList.size()>3)
-				{
-					System.out.println("Troppi pg selezionati");
+		} else if (attacker instanceof PgPlayable currentPlayer) {
+			selectedAction = currentPlayer.getActions().stream()
+					.filter(a -> a.getActionType().equals(actionTypeFromRequest))
+					.findFirst()
+					.orElseThrow(() -> new IllegalStateException("Azione " + actionTypeFromRequest + " non trovata per PG " + currentPlayer.getName()));
+
+			if (targetIdsFromRequest == null || targetIdsFromRequest.isEmpty()) {
+				if (actionRequiresTarget(selectedAction, currentPlayer)) { // Implementa actionRequiresTarget
+					throw new IllegalStateException("L'azione " + selectedAction.getNameAction() + " richiede un bersaglio, ma nessuno è stato fornito.");
 				}
-
-				if (attacker.getId().equals(1L))
-				{
-					if (targetList.size()>2)
-					{
-						System.out.println("Troppi pg selezionati per Claudio");
-					}
-
-					else if (attacker instanceof PgPlayable player && g instanceof Monster monster)
-					{
-						int damage = action.dmgCalculator(player, monster);
-						int hpMonster = previousDto.getEvilTargetHp(g.getId()) - damage;
-
-						if (hpMonster < 0)
-							hpMonster = 0;
-
-						previousDto.substituteEvilTargetHp(g.getId(), hpMonster);
-
-						if (hpMonster == 0)
-							previousDto.getOrder().remove(monster.getId());
-
-						System.out.println("Attaccante: " + attacker.getName() +
-								" | Danni: " + damage +
-								" | Nemico: " + g.getName() +
-								" | HP rimasti: " + hpMonster);
-					}
-					else if (attacker instanceof Monster monster && g instanceof PgPlayable player)
-					{
-						int damage = action.dmgCalculator(monster, player);
-						int hpPlayer = previousDto.getGoodTargetHp(g.getId()) - damage;
-
-						if (hpPlayer < 0)
-							hpPlayer = 0;
-
-						previousDto.substituteGoodTargetHp(g.getId(), hpPlayer);
-
-						if (hpPlayer == 0)
-							previousDto.getOrder().remove(player.getId());
-
-						System.out.println("Attaccante: " + attacker.getName() +
-								" | Danni: " + damage +
-								" | Nemico: " + g.getName() +
-								" | HP rimasti: " + hpPlayer);
-					}
-					else if (attacker instanceof PgPlayable player && g instanceof PgPlayable targetPlayer)
-					{
-						if (action.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD))
-						{
-							int healing = -action.dmgCalculator(attacker, g); // negativo → cura
-							int oldHp = previousDto.getGoodTargetHp(g.getId());
-							int healedHp = oldHp + healing;
-
-
-							previousDto.substituteGoodTargetHp(g.getId(), healedHp);
-
-							System.out.println("Curatore: " + player.getName() +
-									" | Cura: " + healing +
-									" | Alleato: " + targetPlayer.getName() +
-									" | HP dopo la cura: " + healedHp);
-						}
-					}
-					else
-					{
-						throw new IllegalStateException("Non si possono attaccare entity dello stesso tipo");
-					}
+				// Se l'azione non richiede bersaglio o bersaglia sé stesso (es. cura speciale Gitbard su sé stesso)
+				if (selectedAction.getActionType() == ActionType.SPECIALE && currentPlayer.getCharacterType().equals(CharacterType.GITBARD)){
+					// Per ora, se è SPECIALE e GITBARD e non ci sono target, assumiamo che curi sé stesso
+					// Questo potrebbe richiedere una logica più fine se SPECIALE può avere altri effetti senza target
+					actualTargets.add(attacker);
+				} else if (!actionRequiresTarget(selectedAction, currentPlayer)) {
+					actualTargets.add(attacker); // Azione su sé stesso
+				} else {
+					throw new IllegalStateException("Nessun bersaglio fornito per un'azione che lo richiede.");
 				}
-
-				else if (attacker.getId().equals(4L))
-				{
-					if (attacker instanceof PgPlayable player && g instanceof Monster monster)
-					{
-						int damage = action.dmgCalculator(player, monster);
-						int hpMonster = previousDto.getEvilTargetHp(g.getId()) - damage;
-
-						if (hpMonster < 0)
-							hpMonster = 0;
-
-						previousDto.substituteEvilTargetHp(g.getId(), hpMonster);
-
-						if (hpMonster == 0)
-							previousDto.getOrder().remove(monster.getId());
-
-						System.out.println("Attaccante: " + attacker.getName() +
-								" | Danni: " + damage +
-								" | Nemico: " + g.getName() +
-								" | HP rimasti: " + hpMonster);
-					}
-					else if (attacker instanceof Monster monster && g instanceof PgPlayable player)
-					{
-						int damage = action.dmgCalculator(monster, player);
-						int hpPlayer = previousDto.getGoodTargetHp(g.getId()) - damage;
-
-						if (hpPlayer < 0)
-							hpPlayer = 0;
-
-						previousDto.substituteGoodTargetHp(g.getId(), hpPlayer);
-
-						if (hpPlayer == 0)
-							previousDto.getOrder().remove(player.getId());
-
-						System.out.println("Attaccante: " + attacker.getName() +
-								" | Danni: " + damage +
-								" | Nemico: " + g.getName() +
-								" | HP rimasti: " + hpPlayer);
-					}
-					else if (attacker instanceof PgPlayable player && g instanceof PgPlayable targetPlayer)
-					{
-						if (action.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD))
-						{
-							int healing = -action.dmgCalculator(attacker, g); // negativo → cura
-							int oldHp = previousDto.getGoodTargetHp(g.getId());
-							int healedHp = oldHp + healing;
-
-
-							previousDto.substituteGoodTargetHp(g.getId(), healedHp);
-
-							System.out.println("Curatore: " + player.getName() +
-									" | Cura: " + healing +
-									" | Alleato: " + targetPlayer.getName() +
-									" | HP dopo la cura: " + healedHp);
-						}
-					}
-					else
-					{
-						throw new IllegalStateException("Non si possono attaccare entity dello stesso tipo");
-					}
-				}
-
-				else if (attacker.getId().equals(2L) || attacker.getId().equals(3L) || attacker.getId().equals(5L) || attacker.getId().equals(6L))
-				{
-					if (targetList.size()>1)
-					{
-						System.out.println("Troppi pg selezionati per questo personaggio");
-					}
-
-					else if (attacker instanceof PgPlayable player && g instanceof Monster monster)
-					{
-						int damage = action.dmgCalculator(player, monster);
-						int hpMonster = previousDto.getEvilTargetHp(g.getId()) - damage;
-
-						if (hpMonster < 0)
-							hpMonster = 0;
-
-						previousDto.substituteEvilTargetHp(g.getId(), hpMonster);
-
-						if (hpMonster == 0)
-							previousDto.getOrder().remove(monster.getId());
-
-						System.out.println("Attaccante: " + attacker.getName() +
-								" | Danni: " + damage +
-								" | Nemico: " + g.getName() +
-								" | HP rimasti: " + hpMonster);
-					}
-					else if (attacker instanceof Monster monster && g instanceof PgPlayable player)
-					{
-						int damage = action.dmgCalculator(monster, player);
-						int hpPlayer = previousDto.getGoodTargetHp(g.getId()) - damage;
-
-						if (hpPlayer < 0)
-							hpPlayer = 0;
-
-						previousDto.substituteGoodTargetHp(g.getId(), hpPlayer);
-
-						if (hpPlayer == 0)
-							previousDto.getOrder().remove(player.getId());
-
-						System.out.println("Attaccante: " + attacker.getName() +
-								" | Danni: " + damage +
-								" | Nemico: " + g.getName() +
-								" | HP rimasti: " + hpPlayer);
-					}
-					else if (attacker instanceof PgPlayable player && g instanceof PgPlayable targetPlayer)
-					{
-						if (action.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD))
-						{
-							int healing = -action.dmgCalculator(attacker, g); // negativo → cura
-							int oldHp = previousDto.getGoodTargetHp(g.getId());
-							int healedHp = oldHp + healing;
-
-
-							previousDto.substituteGoodTargetHp(g.getId(), healedHp);
-
-							System.out.println("Curatore: " + player.getName() +
-									" | Cura: " + healing +
-									" | Alleato: " + targetPlayer.getName() +
-									" | HP dopo la cura: " + healedHp);
-						}
-					}
-					else
-					{
-						throw new IllegalStateException("Non si possono attaccare entity dello stesso tipo");
-					}
+			} else {
+				actualTargets = gDao.findAllById(targetIdsFromRequest);
+				if (actualTargets.isEmpty() || actualTargets.stream().anyMatch(Objects::isNull)) {
+					throw new IllegalStateException("Uno o più bersagli specificati per il PG non sono validi o non trovati.");
 				}
 			}
-
-
-
-			return previousDto;
+		} else {
+			throw new IllegalStateException("Tipo di attaccante non riconosciuto: " + attacker.getClass().getName());
 		}
 
-
-
-		///  Applica danno in base al tipo
-		Long targetId= targetInList.stream().filter(t-> t!=null).findFirst().orElse(null);
-		GameEntity target= gDao.findById(targetId).orElseThrow(() -> new IllegalStateException("Target non trovato"));
-		if (attacker instanceof PgPlayable player && target instanceof Monster monster)
-		{
-			int hpMonster = previousDto.getEvilTargetHp(target.getId()) - action.dmgCalculator(player, monster);
-
-			if (hpMonster < 0)
-				hpMonster = 0;
-
-			previousDto.substituteEvilTargetHp(target.getId(), hpMonster);
-
-			if (hpMonster == 0)
-			{
-				previousDto.getOrder().remove(monster.getId());
-			}
-
-
-			System.out.println("Attaccante: " + attacker.getName() +
-					"Danni: " + action.dmgCalculator(player, monster) +
-					"Nemico: " + target.getName() +
-					"HP rimasti:  " + hpMonster);
-		}
-		else if (attacker instanceof Monster monster && target instanceof PgPlayable player)
-		{
-			int hpPlayer = previousDto.getGoodTargetHp(target.getId()) - action.dmgCalculator(monster, player);
-
-			if (hpPlayer < 0)
-				hpPlayer = 0;
-
-			previousDto.substituteGoodTargetHp(target.getId(), hpPlayer);
-
-			if (hpPlayer == 0)
-				previousDto.getOrder().remove(player.getId());
-
-			System.out.println("Attaccante: " + attacker.getName() +
-					"Danni: " + action.dmgCalculator(monster, player) +
-					"Nemico: " + target.getName() +
-					"HP rimasti:  " + hpPlayer);
-		}
-		else if (attacker instanceof PgPlayable player && target instanceof PgPlayable targetPlayer)
-		{
-			if (action.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD))
-			{
-				int oldHp = previousDto.getGoodTargetHp(target.getId());
-				int healedHp = oldHp - action.dmgCalculator(attacker, target); // dmg negativo → cura
-				if (healedHp > 100) healedHp = 100; // oppure targetPlayer.getMaxHp() se disponibile
-				previousDto.substituteGoodTargetHp(target.getId(), healedHp);
-
-				System.out.println("Curatore: " + player.getName() +
-						" | Cura: " + (-action.dmgCalculator(attacker, target)) +
-						" | Alleato: " + targetPlayer.getName() +
-						" | HP dopo la cura: " + healedHp);
+		for (GameEntity currentTarget : actualTargets) {
+			if (attacker instanceof PgPlayable player && currentTarget instanceof Monster monsterTarget) {
+				int damage = GameService.precisionCheck(selectedAction.dmgCalculator(player, monsterTarget), selectedAction.getPrecision());
+				int hpMonster = previousDto.getEvilTargetHp(monsterTarget.getId()) - damage;
+				if (hpMonster < 0) hpMonster = 0;
+				previousDto.substituteEvilTargetHp(monsterTarget.getId(), hpMonster);
+				if (hpMonster == 0) {
+					previousDto.getOrder().remove(monsterTarget.getId());
+				}
+			} else if (attacker instanceof Monster monsterAttacker && currentTarget instanceof PgPlayable playerTarget) {
+				int damage = GameService.precisionCheck(selectedAction.dmgCalculator(monsterAttacker, playerTarget), selectedAction.getPrecision());
+				int hpPlayer = previousDto.getGoodTargetHp(playerTarget.getId()) - damage;
+				if (hpPlayer < 0) hpPlayer = 0;
+				previousDto.substituteGoodTargetHp(playerTarget.getId(), hpPlayer);
+				if (hpPlayer == 0) {
+					previousDto.getOrder().remove(playerTarget.getId());
+				}
+			} else if (attacker instanceof PgPlayable player && currentTarget instanceof PgPlayable targetPlayer) {
+				if (selectedAction.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD)) {
+					int healing = GameService.precisionCheck(-selectedAction.dmgCalculator(player, targetPlayer), selectedAction.getPrecision()); // Danno negativo per cura
+					int maxHp = targetPlayer.getHp(); // Assumendo che getHp() sull'entità sia maxHp
+					int currentHp = previousDto.getGoodTargetHp(targetPlayer.getId());
+					int healedHp = Math.min(currentHp + healing, maxHp);
+					previousDto.substituteGoodTargetHp(targetPlayer.getId(), healedHp);
+				} else {
+					// Logica per PG che attacca PG, se permessa (altrimenti lancia eccezione o ignora)
+					// Per ora, assumiamo che non sia un caso comune se non per cure
+					// throw new IllegalStateException("PG non può attaccare PG con azioni non curative.");
+				}
+			} else {
+				throw new IllegalStateException("Combinazione Attaccante/Bersaglio non gestita: "
+						+ attacker.getClass().getSimpleName() + " vs " + currentTarget.getClass().getSimpleName());
 			}
 		}
-		else
-		{
-			throw new IllegalStateException("Non si possono attaccare entity dello stesso tipo");
-		}
-
 		return previousDto;
 	}
 
-	/**
-	 * Il metodo nextRound prende in entrata il GameState precedente e manda avanti la Lista di Entity di 1
-	 */
-	public GameStateDto nextRound(GameStateDto currentState)
-	{
-		battleOver(currentState);
+	// Metodo helper (da implementare con più logica se necessario)
+	private boolean actionRequiresTarget(Action action, PgPlayable player) {
+		// Se l'azione è SPECIALE e il PG è GITBARD, potrebbe non richiedere un bersaglio
+		// se l'intenzione è una cura ad area o su sé stesso (non gestito qui)
+		if (action.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD)) {
+			// La cura del Gitbard nel tuo codice originale sembra sempre richiedere un target esplicito.
+			// Se ci sono azioni speciali che non richiedono target, aggiungi la logica qui.
+			return true; // Per ora, assumiamo che anche la speciale del Gitbard richieda un target.
+		}
+		// Aggiungi altre logiche per azioni che non richiedono bersaglio (es. buff su sé stesso)
+		// if (action.targetsSelfOnly()) return false;
+		return true; // Default: l'azione richiede un bersaglio
+	}
+
+
+	public GameStateDto nextRound(GameStateDto currentState) {
+		if (currentState.getOrder().isEmpty()) {
+			// Non ci sono più entità nell'ordine, la battaglia dovrebbe essere finita
+			// battleOver dovrebbe gestire questo, ma è bene avere un controllo
+			return currentState;
+		}
+		battleOver(currentState); // Controlla se la battaglia è finita prima di procedere
 
 		List<Long> order = currentState.getOrder();
-		Long currentEntityId = currentState.getCurrentEntity();
+		if (order.isEmpty()) { // Ricontrolla dopo battleOver che potrebbe aver modificato l'ordine
+			return currentState;
+		}
 
+		Long currentEntityId = currentState.getCurrentEntity();
 		int currentEntityIndex = order.indexOf(currentEntityId);
+
+		if (currentEntityIndex == -1) {
+			// L'entità corrente non è più nell'ordine (probabilmente sconfitta)
+			// Scegli la prima entità nell'ordine attuale come prossima
+			if (!order.isEmpty()) {
+				currentState.setCurrentEntity(order.get(0));
+			} else {
+				// Nessuno è rimasto, la battaglia è finita
+			}
+			return currentState;
+		}
 
 		int nextEntityIndex = (currentEntityIndex + 1) % order.size();
 		Long nextEntityId = order.get(nextEntityIndex);
-
 		currentState.setCurrentEntity(nextEntityId);
 
 		return currentState;
 	}
 
-	public String battleOver(GameStateDto currentState)
-	{
+	public String battleOver(GameStateDto currentState) {
 		List<Long> order = currentState.getOrder();
 
-		boolean noMonster = order.stream()
+		boolean monstersAlive = order.stream()
 				.map(gDao::findById)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
-				.noneMatch(e -> e instanceof Monster);
+				.anyMatch(e -> e instanceof Monster && e.getHp() > 0);
 
-		boolean playerAlive = order.stream()
+		boolean playersAlive = order.stream()
 				.map(gDao::findById)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
-				.anyMatch(e -> e instanceof PgPlayable);
+				.anyMatch(e -> e instanceof PgPlayable && e.getHp() > 0);
 
-		if (noMonster && playerAlive)
+		// Controlla anche direttamente dalle liste good/evil in GameStateDto
+		// perché l'ordine potrebbe non essere aggiornato istantaneamente se un PG/Mostro viene sconfitto
+		// e rimosso dall'ordine *dopo* che questo metodo è chiamato.
+		boolean playersInDtoAlive = currentState.getGood().stream().anyMatch(pg -> pg.hp() > 0);
+		boolean monstersInDtoAlive = currentState.getEvil().stream().anyMatch(m -> m.hp() > 0);
+
+
+		if (!monstersInDtoAlive && playersInDtoAlive)
 			return "Hai vinto";
-		else if (!noMonster && !playerAlive)
+		else if (monstersInDtoAlive && !playersInDtoAlive)
 			return "Hai perso";
+		else if (!monstersInDtoAlive && !playersInDtoAlive)
+			return "Pareggio? O tutti sconfitti."; // Caso anomalo
 		else
 			return "La battaglia è ancora in corso";
 	}
-
-
-
-
-//	public GameStateDto nextTurn(GameStateDto previousDto, List<Long> targetInList, ActionType actionType)
-//	{
-//		/// Ottieni l'id dell'attaccante
-//		Long attackerId = previousDto.getCurrentEntity();
-//
-//
-//		///  Restituisce le entità effettive e controlla se esistono
-//		GameEntity attacker = gDao.findById(attackerId).orElseThrow(() -> new IllegalStateException("Attaccante non trovato"));
-//		List<GameEntity> targetList = gDao.findAllById(targetInList);
-//
-////		for (Long target : targetInList)
-////			targetList.add(gDao.findById(targetInList).orElseThrow(() -> new IllegalStateException("Target non trovato")));
-//
-//		/// Cerca l'azione in base al tipo
-//		Action action = attacker.getActions().stream()
-//				.filter(a -> a.getActionType().equals(actionType))
-//				.findFirst()
-//				.orElseThrow(() -> new IllegalStateException("Azione non trovata"));
-//
-//		if (actionType.equals(ActionType.SPECIALE))
-//		{
-//			for (GameEntity g : targetList)
-//			{
-//				if (attacker instanceof PgPlayable player && g instanceof Monster monster)
-//				{
-//					int damage = action.dmgCalculator(player, monster);
-//					int hpMonster = previousDto.getEvilTargetHp(g.getId()) - damage;
-//
-//					if (hpMonster < 0)
-//						hpMonster = 0;
-//
-//					previousDto.substituteEvilTargetHp(g.getId(), hpMonster);
-//
-//					if (hpMonster == 0)
-//						previousDto.getOrder().remove(monster.getId());
-//
-//					System.out.println("Attaccante: " + attacker.getName() +
-//							" | Danni: " + damage +
-//							" | Nemico: " + g.getName() +
-//							" | HP rimasti: " + hpMonster);
-//				}
-//				else if (attacker instanceof Monster monster && g instanceof PgPlayable player)
-//				{
-//					int damage = action.dmgCalculator(monster, player);
-//					int hpPlayer = previousDto.getGoodTargetHp(g.getId()) - damage;
-//
-//					if (hpPlayer < 0)
-//						hpPlayer = 0;
-//
-//					previousDto.substituteGoodTargetHp(g.getId(), hpPlayer);
-//
-//					if (hpPlayer == 0)
-//						previousDto.getOrder().remove(player.getId());
-//
-//					System.out.println("Attaccante: " + attacker.getName() +
-//							" | Danni: " + damage +
-//							" | Nemico: " + g.getName() +
-//							" | HP rimasti: " + hpPlayer);
-//				}
-//				else if (attacker instanceof PgPlayable player && g instanceof PgPlayable targetPlayer)
-//				{
-//					if (action.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD))
-//					{
-//						int healing = -action.dmgCalculator(attacker, g); // negativo → cura
-//						int oldHp = previousDto.getGoodTargetHp(g.getId());
-//						int healedHp = oldHp + healing;
-//
-//
-//						previousDto.substituteGoodTargetHp(g.getId(), healedHp);
-//
-//						System.out.println("Curatore: " + player.getName() +
-//								" | Cura: " + healing +
-//								" | Alleato: " + targetPlayer.getName() +
-//								" | HP dopo la cura: " + healedHp);
-//					}
-//				}
-//				else
-//				{
-//					throw new IllegalStateException("Non si possono attaccare entity dello stesso tipo");
-//				}
-//			}
-//
-//			return previousDto;
-//		}
 }
-
