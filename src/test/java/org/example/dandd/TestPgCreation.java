@@ -37,7 +37,7 @@ public class TestPgCreation
 		// --- PG Cloud Constantine (Troubleshooter) ---
 		PgPlayable cloudPg = new PgPlayable();
 		cloudPg.setCharacterType(CharacterType.TROUBLESHOOTER);
-		cloudPg.setName("Cloud Constant");
+		cloudPg.setName("The President");
 		cloudPg.setDescription("Un cecchino infallibile, armato del suo fido fucile 4NGUL4R," +
 				" è pronto a sterminare le orde di bug. Vive per il brivido di premere il grilletto," +
 				" e ha già un proiettile con un nome inciso: Bug Abissale. Un colpo, un morto.");
@@ -238,7 +238,7 @@ public class TestPgCreation
 		// --- PG Skibidi Sanni (DataMystic) ---
 		PgPlayable sanniPg = new PgPlayable();
 		sanniPg.setCharacterType(CharacterType.DATAMYSTIC);
-		sanniPg.setName("Skibidi Sanni (ajo)");
+		sanniPg.setName("The San");
 		sanniPg.setDescription("Una misteriosa figura incappucciata, il volto mai visibile. " +
 				"Nessuno sa chi sia, possiede solo la sua tunica e il suo leggendario Grimorio,  REPOSITORY." +
 				" Lanciando palle di fuoco digitali, stringhe di codice e beans da spring, " +
