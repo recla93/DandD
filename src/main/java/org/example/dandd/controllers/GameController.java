@@ -54,13 +54,6 @@ public class GameController
 		return battleService.nextTurn(actionRequest.getPreviousDto(), actionRequest.getTarget(), actionRequest.getActionType());
 	}
 
-//	@PostMapping("/action")
-//	public List<Action> roundAction(@RequestBody GameStateDto gameStateDto)
-//	{
-//		PgPlayable pg = pgPlayableDao.findById(gameStateDto.getCurrentEntity()).orElse(null);
-//		return pg != null ? pg.getActions() : Collections.emptyList();
-//	}
-
 	@PostMapping("/next")
 	public GameStateDto next(@RequestBody GameStateDto currentState)
 	{

@@ -1,9 +1,6 @@
 package org.example.dandd.model.entities;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,4 +17,8 @@ public class Monster extends GameEntity
 {
 	@Enumerated(EnumType.STRING)
 	private Danger danger;
+
+	@Column(name = "image_url")
+	private String imageUrl;
+
 }

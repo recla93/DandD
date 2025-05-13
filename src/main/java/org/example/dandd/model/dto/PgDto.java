@@ -1,6 +1,9 @@
 package org.example.dandd.model.dto;
 
+import lombok.Data;
+
 import java.util.List;
+
 
 public record PgDto
 		(
@@ -12,12 +15,31 @@ public record PgDto
 				int def,
 				int spd,
 				List<String> actionsName,
+				List<String> actionsDescriptions,
 				List<String> equipmentsName,
-				String enumType
+				List<String> equipmentsDescriptions,
+				String enumType,
+				String imageUrl
 		)
 {
 	public PgDto nuoviHp(int nuoviHp)
 	{
-		return new PgDto(this.id,this.name,this.description,nuoviHp,this.atk,this.def,this.spd,this.actionsName,equipmentsName,enumType);
+		return new PgDto(
+				this.id,
+				this.name,
+				this.description,
+				nuoviHp,
+				this.atk,
+				this.def,
+				this.spd,
+				this.actionsName,
+				this.actionsDescriptions,
+				this.equipmentsName,
+				this.equipmentsDescriptions,
+				this.enumType,
+				this.imageUrl
+		);
 	}
+
 }
+

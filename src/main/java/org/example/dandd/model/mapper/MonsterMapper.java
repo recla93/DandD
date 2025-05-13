@@ -23,7 +23,9 @@ public class MonsterMapper
 				monster.getAtk(),
 				monster.getDef(),
 				monster.getSpeed(),
-				monster.getActions().stream().map(a->a.getNameAction()).toList()
+				monster.getActions().stream().map(a->a.getNameAction()).toList(),
+				monster.getActions().stream().map(a->a.getDescriptionAction()).toList(),
+				monster.getImageUrl()
 		);
 	}
 
