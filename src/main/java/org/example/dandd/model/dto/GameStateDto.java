@@ -7,7 +7,9 @@ import org.example.dandd.model.entities.Action;
 import org.example.dandd.model.entities.GameEntity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -16,12 +18,8 @@ public class GameStateDto
 {
 	private List<PgDto> good = new ArrayList<>();
 	private List<MonsterDto> evil = new ArrayList<>();
-
 	private List<Long> order= new ArrayList<>();
-
 	private Long currentEntity;
-
-
 
 	public void substituteGoodTargetHp(Long id, int hp)
 	{
