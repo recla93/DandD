@@ -101,7 +101,7 @@ public class BattleService {
 					throw new IllegalStateException("L'azione " + selectedAction.getNameAction() + " richiede un bersaglio, ma nessuno è stato fornito.");
 				}
 				// Se l'azione non richiede bersaglio o bersaglia sé stesso (es. cura speciale Gitbard su sé stesso)
-				if (selectedAction.getActionType() == ActionType.SPECIALE && currentPlayer.getCharacterType().equals(CharacterType.GITBARD)){
+				if (selectedAction.getActionType() == ActionType.SPECIALE && currentPlayer.getCharacterType().equals(CharacterType.GITBARD) || selectedAction.getActionType() == ActionType.HEAVY && currentPlayer.getCharacterType().equals(CharacterType.OMNICODER)){
 					// Per ora, se è SPECIALE e GITBARD e non ci sono target, assumiamo che curi sé stesso
 					// Questo potrebbe richiedere una logica più fine se SPECIALE può avere altri effetti senza target
 					actualTargets.add(attacker);
@@ -138,7 +138,7 @@ public class BattleService {
 					previousDto.getOrder().remove(playerTarget.getId());
 				}
 			} else if (attacker instanceof PgPlayable player && currentTarget instanceof PgPlayable targetPlayer) {
-				if (selectedAction.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD)) {
+				if (selectedAction.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD) || selectedAction.getActionType() == ActionType.HEAVY && player.getCharacterType().equals(CharacterType.OMNICODER)) {
 					int healing = GameService.precisionCheck(-selectedAction.dmgCalculator(player, targetPlayer), selectedAction.getPrecision()); // Danno negativo per cura
 					int maxHp = targetPlayer.getHp(); // Assumendo che getHp() sull'entità sia maxHp
 					int currentHp = previousDto.getGoodTargetHp(targetPlayer.getId());
@@ -161,7 +161,7 @@ public class BattleService {
 	private boolean actionRequiresTarget(Action action, PgPlayable player) {
 		// Se l'azione è SPECIALE e il PG è GITBARD, potrebbe non richiedere un bersaglio
 		// se l'intenzione è una cura ad area o su sé stesso (non gestito qui)
-		if (action.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD)) {
+		if (action.getActionType() == ActionType.SPECIALE && player.getCharacterType().equals(CharacterType.GITBARD)|| action.getActionType() == ActionType.HEAVY && player.getCharacterType().equals(CharacterType.OMNICODER)) {
 			// La cura del Gitbard nel tuo codice originale sembra sempre richiedere un target esplicito.
 			// Se ci sono azioni speciali che non richiedono target, aggiungi la logica qui.
 			return true; // Per ora, assumiamo che anche la speciale del Gitbard richieda un target.

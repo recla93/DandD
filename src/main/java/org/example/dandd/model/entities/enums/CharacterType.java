@@ -7,7 +7,8 @@ public enum CharacterType
 	DATAMYSTIC("",""),
 	GITBARD("",""),
 	INFRASTRUCTURE("",""),
-	TROUBLESHOOTER("","");
+	TROUBLESHOOTER("",""),
+	OMNICODER("","");
 
 	private final String displayName;
 	private final String description;

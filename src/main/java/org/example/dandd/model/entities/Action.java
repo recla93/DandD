@@ -55,7 +55,12 @@ public class Action extends BaseEntity {
 			if (difensore instanceof Monster m) {
 				switch (actionType) {
 					case BASE: dmg = p.getAtk(); break;
-					case HEAVY: dmg = p.getAtk() + p.getEquipments().stream()
+					case HEAVY:
+						if(p.getCharacterType() == CharacterType.OMNICODER)
+						{
+							return -1000;
+						}
+						dmg = p.getAtk() + p.getEquipments().stream()
 							.mapToInt(arma -> arma.getPlusDmg())
 							.sum();
 						break;
@@ -64,6 +69,7 @@ public class Action extends BaseEntity {
 							case CODECLEANER: dmg = p.getAtk()+1000; break;
 							case CODETHIEF:
 							case DATAMYSTIC:
+							case OMNICODER:
 							case TROUBLESHOOTER: {
 								int equipBonus = p.getEquipments().stream()
 										.mapToInt(arma -> arma.getPlusDmg())

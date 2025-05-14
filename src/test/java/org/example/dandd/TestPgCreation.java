@@ -354,8 +354,8 @@ public class TestPgCreation
 		herHSpecialAtk.setCooldown(2);
 		herHSpecialAtk.setPrecision(100);
 		herHSpecialAtk.setEntity(herPg);
-		herBaseAtk.setTargetsAllies(true);
-		herBaseAtk.setTargetsSelf(false);
+		herHSpecialAtk.setTargetsAllies(true);
+		herHSpecialAtk.setTargetsSelf(false);
 		aDao.save(herHSpecialAtk);
 
 		// --- PG Sandor Monster (CodeCleaner) ---
@@ -416,6 +416,66 @@ public class TestPgCreation
 		sandorSpecialAtk.setEntity(sandorPg);
 		aDao.save(sandorSpecialAtk);
 
+		//Stefano
+		PgPlayable stefano = new PgPlayable();
+		stefano.setCharacterType(CharacterType.OMNICODER);
+		stefano.setName("Professor Stefano Kernel");
+		stefano.setDescription("Nel mondo oscuro e brutale del Codex Dungeon," +
+				" dove i bug divorano la memoria e i runtime si spezzano come ossa" +
+				", si erge una figura leggendaria: il Professor Stefano Kernel," +
+				" il più temuto e rispettato tra gli Ingegneri del Codice. Al suo fianco c’è Sissyintax," +
+				" una maltesina cibernetica addestrata a stordire virus grazie al suo abbaio amplificato." +
+				" Ex maestro dell'Accademia di Generational Code, è rinomato per il suo stile inconfondibile:" +
+				" cuffie sempre accese che captano le frequenze nascoste dell'infrastruttura corrotta e una camicia floreale intrisa di byte antichi," +
+				" simbolo delle sue infinite ore trascorse a ottimizzare codici ed a rispondere a dubbi, domande o curiosità.");
+		stefano.setHp(300);
+		stefano.setAtk(80);
+		stefano.setDef(50);
+		stefano.setSpeed(70);
+		stefano.setImageUrl("https://i.imgur.com/VGDxEsr.png");
+		pDao.save(stefano);
+
+		Equipment stefanoWeaponF  = new Equipment();
+		stefanoWeaponF.setEquipmentType(EquipmentType.WEAPON);
+		stefanoWeaponF.setName("VETTORE");
+		stefanoWeaponF.setDescription("Forgiata nel cyberspazio, taglia il caos del codice con precisione chirurgica. La sua energia, alimentata dal flusso del codice, emette un suono simile a un beep ogni volta che viene estratta, come se stesse compilando un nuovo programma.Si narra che il suo nome provenga da un errore di pronuncia di \"Array\".");
+		stefanoWeaponF.setPlayable(stefano);
+		stefanoWeaponF.setPlusDmg(69);
+		eDao.save(stefanoWeaponF);
+
+		Action stefanoBaseAtk = new Action();
+		stefanoBaseAtk.setNameAction("Byte");
+		stefanoBaseAtk.setDescriptionAction("Sissyntax da un morso al nemico lasciando il codice scoperto.");
+		stefanoBaseAtk.setMaxNumTarget(1);
+		stefanoBaseAtk.setActionType(ActionType.BASE);
+		stefanoBaseAtk.setPrecision(100);
+		stefanoBaseAtk.setEntity(stefano);
+		aDao.save(stefanoBaseAtk);
+
+
+		Action stefanoHeavyAtk = new Action();
+		stefanoHeavyAtk.setNameAction("Patch Istantanea");
+		stefanoHeavyAtk.setDescriptionAction("Cura se stesso e gli alleati correggendo bug critici nel sistema.");
+		stefanoHeavyAtk.setMaxNumTarget(3);
+		stefanoHeavyAtk.setTargetsSelf(false);
+		stefanoHeavyAtk.setTargetsAllies(true);
+		stefanoHeavyAtk.setActionType(ActionType.HEAVY);
+		stefanoHeavyAtk.setPrecision(99);
+		stefanoHeavyAtk.setEntity(stefano);
+		aDao.save(stefanoHeavyAtk);
+
+
+		Action stefanoSpecialAtk = new Action();
+		stefanoSpecialAtk.setNameAction("Correzione \"carattere per carattere\"");
+		stefanoSpecialAtk.setDescriptionAction("L'attacco più temuto da glitch ed errori nel codice. Stefano concentra tutta la sua energia in un devastante colpo mentale che ha dalla sua anni di odio, rancore e passione per il suo lavoro.");
+		stefanoSpecialAtk.setMaxNumTarget(3);
+		stefanoSpecialAtk.setActionType(ActionType.SPECIALE);
+		stefanoSpecialAtk.setPrecision(99);
+		stefanoSpecialAtk.setCooldown(2);
+		stefanoSpecialAtk.setMolt(2);
+		stefanoSpecialAtk.setEntity(stefano);
+		aDao.save(stefanoSpecialAtk);
+
 
 		// --- Mostro Javlin ---
 		Monster javlin  = new Monster();
@@ -426,7 +486,7 @@ public class TestPgCreation
 		javlin.setDef(5);
 		javlin.setSpeed(5);
 		javlin.setDanger(Danger.UNCHECKED);
-		javlin.setImageUrl("https://i.imgur.com/6Hzvm8N.png"); // URL Javlin
+		javlin.setImageUrl("https://imgur.com/bdgBwO6"); // URL Javlin
 		mDao.save(javlin);
 
 		Action graffioBase = new Action();
@@ -491,7 +551,7 @@ public class TestPgCreation
 		ogreSql.setAtk(20);
 		ogreSql.setDef(18);
 		ogreSql.setSpeed(10);
-		ogreSql.setImageUrl("https://i.imgur.com/IOeIhWJ.png"); // URL OgreSQL
+		ogreSql.setImageUrl("https://i.imgur.com/ashkKXU.png"); // URL OgreSQL
 		mDao.save(ogreSql);
 
 		Action baseOgre= new Action();
@@ -557,7 +617,7 @@ public class TestPgCreation
 		sourceCode.setAtk(50);
 		sourceCode.setDef(20);
 		sourceCode.setSpeed(50);
-		sourceCode.setImageUrl("https://cdn.discordapp.com/attachments/1367102298660147207/1371780447092346890/ChatGPT_Image_13_mag_2025_10_12_37-removebg-preview.png?ex=68250a59&is=6823b8d9&hm=36b5022375809f81673ac45920fa8803dca83ebfd19157891057e912437d39a3&"); // URL CodeSource
+		sourceCode.setImageUrl("https://imgur.com/sp8i0vo"); // URL CodeSource
 		mDao.save(sourceCode);
 
 		Action baseSource= new Action();
