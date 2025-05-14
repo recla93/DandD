@@ -1,5 +1,6 @@
 package org.example.dandd.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.dandd.service.BattleService;
@@ -24,12 +25,11 @@ public class GameEntity extends BaseEntity
 	 */
 	protected int hp, atk, def, speed;
 	protected String name;
+	protected String imgurl;
 
 	@Column(columnDefinition = "TEXT")
 	protected String description;
 
-
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "entity")
 	private List<Action> actions;
-
 }

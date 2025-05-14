@@ -408,7 +408,7 @@ public class TestPgCreation
 				"Scaraventa sulla tastiera un dump di energia bruta e taurine-driven, cancellando tutto il buffer del nemico con un attacco che sa di delirio e vendetta.");
 		sandorSpecialAtk.setMaxNumTarget(1);
 		sandorSpecialAtk.setActionType(ActionType.SPECIALE);
-		sandorSpecialAtk.setPrecision(10); // Precisione molto bassa, come da descrizione implicita
+		sandorSpecialAtk.setPrecision(50); // Precisione molto bassa, come da descrizione implicita
 		sandorSpecialAtk.setMolt(3); // Moltiplicatore alto per compensare la bassa precisione
 		sandorSpecialAtk.setCooldown(4); // Cooldown lungo
 		sandorSpecialAtk.setEntity(sandorPg);
@@ -555,7 +555,7 @@ public class TestPgCreation
 		sourceCode.setAtk(50);
 		sourceCode.setDef(20);
 		sourceCode.setSpeed(50);
-		sourceCode.setImageUrl("https://i.imgur.com/rJk6L8N.png"); // URL CodeSource
+		sourceCode.setImageUrl("https://cdn.discordapp.com/attachments/1367102298660147207/1371780447092346890/ChatGPT_Image_13_mag_2025_10_12_37-removebg-preview.png?ex=68250a59&is=6823b8d9&hm=36b5022375809f81673ac45920fa8803dca83ebfd19157891057e912437d39a3&"); // URL CodeSource
 		mDao.save(sourceCode);
 
 		Action baseSource= new Action();

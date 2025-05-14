@@ -24,6 +24,7 @@ public class PgMapper
 				pg.getSpeed(),
 				pg.getActions().stream().map(a -> a.getNameAction()).toList(),
 				pg.getActions().stream().map(a -> a.getDescriptionAction()).toList(),
+				pg.getActions().stream().map(a->a.getActionType()).toList(),
 				pg.getEquipments().stream().map(e -> e.getName()).toList(),
 				pg.getEquipments().stream().map(e -> e.getDescription()).toList(),
 				pg.getCharacterType().name(),

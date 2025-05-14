@@ -1,5 +1,6 @@
 package org.example.dandd.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class Action extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private ActionType actionType;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_entity")
 	private GameEntity entity;
@@ -81,7 +83,7 @@ public class Action extends BaseEntity {
 							.sum();
 					case SPECIALE -> {
 						switch (p.getCharacterType()) {
-							case CODECLEANER -> dmg = 1000;
+							case CODECLEANER -> dmg = p.getAtk()+1000;
 							case CODETHIEF, DATAMYSTIC, TROUBLESHOOTER -> {
 								int equipBonus = p.getEquipments().stream()
 										.mapToInt(arma -> arma.getPlusDmg())

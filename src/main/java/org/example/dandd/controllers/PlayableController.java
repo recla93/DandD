@@ -28,11 +28,4 @@ public class PlayableController
 	{
 		return playableService.getPgDtoById(id);
 	}
-
-
-
-
-
-
-
 }

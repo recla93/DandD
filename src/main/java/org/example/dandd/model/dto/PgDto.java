@@ -1,6 +1,7 @@
 package org.example.dandd.model.dto;
 
 import lombok.Data;
+import org.example.dandd.model.entities.enums.ActionType;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public record PgDto
 				int spd,
 				List<String> actionsName,
 				List<String> actionsDescriptions,
+				List<ActionType> actionTypes,
 				List<String> equipmentsName,
 				List<String> equipmentsDescriptions,
 				String enumType,
@@ -34,6 +36,7 @@ public record PgDto
 				this.spd,
 				this.actionsName,
 				this.actionsDescriptions,
+				this.actionTypes,
 				this.equipmentsName,
 				this.equipmentsDescriptions,
 				this.enumType,
