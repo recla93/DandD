@@ -17,7 +17,7 @@ public record PgDto
 				int spd,
 				List<String> actionsName,
 				List<String> actionsDescriptions,
-				List<ActionType> actionTypes,
+				List<String> actionTypes,
 				List<String> equipmentsName,
 				List<String> equipmentsDescriptions,
 				String enumType,
