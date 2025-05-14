@@ -354,6 +354,8 @@ public class TestPgCreation
 		herHSpecialAtk.setCooldown(2);
 		herHSpecialAtk.setPrecision(100);
 		herHSpecialAtk.setEntity(herPg);
+		herBaseAtk.setTargetsAllies(true);
+		herBaseAtk.setTargetsSelf(false);
 		aDao.save(herHSpecialAtk);
 
 		// --- PG Sandor Monster (CodeCleaner) ---

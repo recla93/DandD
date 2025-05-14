@@ -21,20 +21,27 @@ public class PgMapper {
 		List<ActionDetailDto> detailedActionsList;
 		if (pg.getActions() != null) {
 			detailedActionsList = pg.getActions().stream()
-					.map(actionEntity -> new ActionDetailDto(
-							actionEntity.getNameAction(),
-							actionEntity.getDescriptionAction(),
-							actionEntity.getActionType(),
-							// Per currentCooldown: questo valore è dinamico e dovrebbe venire dallo stato di gioco.
-							// Se l'entità Action non traccia il cooldown dinamico (cosa probabile),
-							// inizializzalo a 0 qui. Il BattleService dovrà gestirlo.
-							// Se actionEntity.getCooldown() è il cooldown MASSIMO, usalo per maxCooldown.
-							0, // currentCooldown (placeholder, da gestire dinamicamente)
-							actionEntity.getCooldown(),       // maxCooldown (il cooldown base dell'azione)
-							actionEntity.getMaxNumTarget(),   // maxTargets
-							actionEntity.isTargetsAllies(),   // targetsAllies (dal nuovo campo in Action.java)
-							actionEntity.isTargetsSelf()      // targetsSelf (dal nuovo campo in Action.java)
-					))
+					.map(actionEntity -> {
+						// DEBUGGING: Stampa i valori letti dall'entità Action
+						System.out.println("[DEBUG PgMapper] Azione: " + actionEntity.getNameAction());
+						System.out.println("  > actionEntity.isTargetsAllies(): " + actionEntity.isTargetsAllies());
+						System.out.println("  > actionEntity.isTargetsSelf(): " + actionEntity.isTargetsSelf());
+						System.out.println("  > actionEntity.getMaxNumTarget(): " + actionEntity.getMaxNumTarget());
+						System.out.println("  > actionEntity.getCooldown(): " + actionEntity.getCooldown());
+						System.out.println("  > actionEntity.getActionType(): " + actionEntity.getActionType());
+
+
+						return new ActionDetailDto(
+								actionEntity.getNameAction(),
+								actionEntity.getDescriptionAction(),
+								actionEntity.getActionType(),
+								0, // currentCooldown (placeholder, da gestire dinamicamente nel BattleService)
+								actionEntity.getCooldown(),       // maxCooldown (il cooldown base dell'azione)
+								actionEntity.getMaxNumTarget(),   // maxTargets
+								actionEntity.isTargetsAllies(),   // targetsAllies
+								actionEntity.isTargetsSelf()      // targetsSelf
+						);
+					})
 					.collect(Collectors.toList());
 		} else {
 			detailedActionsList = Collections.emptyList();

@@ -32,7 +32,9 @@ public class Action extends BaseEntity {
 	private ActionType actionType;
 
 	// NUOVI CAMPI DA AGGIUNGERE (e relative colonne nel DB)
+	@Column(name = "targets_allies")
 	private boolean targetsAllies; // true se può bersagliare alleati (es. cure)
+	@Column(name = "targets_self")
 	private boolean targetsSelf;   // true se bersaglia solo sé stesso e non richiede selezione
 
 	@JsonIgnore
