@@ -509,6 +509,38 @@ public class TestPgCreation
 		pushMaligno.setEntity(javlin);
 		aDao.save(pushMaligno);
 
+		// --- Mostro Spring-Ghoul ---
+		Monster springGoul  = new Monster();
+		springGoul.setName("Spring-Ghoul");
+		springGoul.setDescription("Un essere infimo e schifoso fatto di codici mai finiti ed errori mai letti carattere per carattere.");
+		springGoul.setHp(80);
+		springGoul.setAtk(20);
+		springGoul.setDef(5);
+		springGoul.setSpeed(5);
+		springGoul.setDanger(Danger.UNCHECKED);
+		springGoul.setImageUrl("https://i.imgur.com/G3gbNgi.png"); // URL springGoul
+		mDao.save(springGoul);
+
+		Action morsoBase = new Action();
+		morsoBase.setNameAction("Morso");
+		morsoBase.setDescriptionAction("Un morso superficiale ma fastidioso, come un typo non rilevato dal linter.");
+		morsoBase.setMaxNumTarget(1);
+		morsoBase.setActionType(ActionType.BASE);
+		morsoBase.setPrecision(100);
+		morsoBase.setEntity(springGoul);
+		aDao.save(morsoBase);
+
+		Action spintaMaligna = new Action();
+		spintaMaligna.setNameAction("Spinta Maligna");
+		spintaMaligna.setDescriptionAction("Esegue un push su main alle 18:01 di venerdì. La build esplode e il bug ride.");
+		spintaMaligna.setMaxNumTarget(2);
+		spintaMaligna.setActionType(ActionType.SPECIALE);
+		spintaMaligna.setPrecision(80);
+		spintaMaligna.setMolt(1.2); // Aggiunto moltiplicatore
+		spintaMaligna.setCooldown(2); // Aggiunto cooldown
+		spintaMaligna.setEntity(springGoul);
+		aDao.save(spintaMaligna);
+
 
 		// --- Mostro Angulorc ---
 		Monster angulorc = new Monster();
