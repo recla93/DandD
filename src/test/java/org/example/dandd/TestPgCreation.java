@@ -51,7 +51,7 @@ public class TestPgCreation
 		Equipment cloudWeaponF  = new Equipment();
 		cloudWeaponF.setEquipmentType(EquipmentType.WEAPON);
 		cloudWeaponF.setName("4NGUL4R");
-		cloudWeaponF.setDescription("Cloud effettua un commit chirurgico direttamente sulla realtà." +
+		cloudWeaponF.setDescription("The President effettua un commit chirurgico direttamente sulla realtà." +
 				" Con git add --patch, seleziona la porzione di codice difettosa nel nemico e la sostituisce con puro danno." +
 				" Nessun messaggio di commit, solo dolore localizzato.");
 		cloudWeaponF.setPlayable(cloudPg);
@@ -60,7 +60,7 @@ public class TestPgCreation
 
 		Action cloudBaseAtk = new Action();
 		cloudBaseAtk.setNameAction("Binding Fatale");
-		cloudBaseAtk.setDescriptionAction("Cloud estende un [(ngModel)] tra il mirino del suo 4NGUL4R e il cuore del nemico.\n" +
+		cloudBaseAtk.setDescriptionAction("The President estende un [(ngModel)] tra il mirino del suo 4NGUL4R e il cuore del nemico.\n" +
 				" Ogni movimento, ogni intenzione," +
 				" ogni impulso si sincronizza in tempo reale.\n" +
 				"Premere il grilletto è solo una formalità: il danno è già stato scritto nel template.");
@@ -73,7 +73,7 @@ public class TestPgCreation
 
 		Action cloudHeavyAtk = new Action();
 		cloudHeavyAtk.setNameAction("Refresh Manuale");
-		cloudHeavyAtk.setDescriptionAction("Cloud forza un refresh manuale su una build instabile. Ma non è un aggiornamento: è una sentenza.\n" +
+		cloudHeavyAtk.setDescriptionAction("The President forza un refresh manuale su una build instabile. Ma non è un aggiornamento: è una sentenza.\n" +
 				"Il bersaglio, incapace di gestire il nuovo ciclo di vita, va in ExpressionChangedAfterItHasBeenCheckedError.\n" +
 				"E quando l'app si rompe… qualcosa esplode.");
 		cloudHeavyAtk.setMaxNumTarget(1);
@@ -85,7 +85,7 @@ public class TestPgCreation
 
 		Action cloudSpecialAtk = new Action();  //danno 58.5
 		cloudSpecialAtk.setNameAction("Iniezione Letale");
-		cloudSpecialAtk.setDescriptionAction("Cloud forza una dependency injection nel cuore del nemico, iniettando un servizio instabile e privo di controlli.\n" +
+		cloudSpecialAtk.setDescriptionAction("The President forza una dependency injection nel cuore del nemico, iniettando un servizio instabile e privo di controlli.\n" +
 				"Il bersaglio non riesce a risolvere il provider e collassa in un errore esistenziale.\n" +
 				"Il modulo si autodistrugge. Stack trace: sconosciuto.");
 		cloudSpecialAtk.setMaxNumTarget(2);
@@ -262,7 +262,7 @@ public class TestPgCreation
 
 		Action sanniBaseAtk = new Action();
 		sanniBaseAtk.setNameAction("Data Bolt");
-		sanniBaseAtk.setDescriptionAction("Con un gesto rapido, Sanni lancia un proiettile di dati energetici.\n" +
+		sanniBaseAtk.setDescriptionAction("Con un gesto rapido, The San lancia un proiettile di dati energetici.\n" +
 				"Carico di energia pura e diretta, il Data Bolt attraversa il campo di battaglia con una velocità impressionante, colpendo il bersaglio con la precisione di un algoritmo ottimizzato.\n" +
 				"Ogni impatto è come una query SQL che restituisce un errore fatale: il nemico viene travolto dalla forza dei dati, subendo danni devastanti in un istante.");
 		sanniBaseAtk.setMaxNumTarget(1);
@@ -274,7 +274,7 @@ public class TestPgCreation
 		Action sanniHeavyAtk = new Action();
 		sanniHeavyAtk.setNameAction("Data Tempest");
 		sanniHeavyAtk.setDescriptionAction("Una tempesta di dati energetici scatena il caos sul campo da battaglia.\n" +
-				"Sanni lancia un Data Surge che esplode con un'energia inarrestabile, annientando tutto ciò che incontra.\n" +
+				"The San lancia un Data Surge che esplode con un'energia inarrestabile, annientando tutto ciò che incontra.\n" +
 				"I nemici vengono travolti da un flusso di informazioni così denso e impetuoso da corrompere i loro sistemi.\n" +
 				"Non solo subiscono danni devastanti, ma il loro codice viene distrutto, come se fosse inghiottito da un black hole di dati. Nessuna difesa può resistere a questa furia informatica.");
 		sanniHeavyAtk.setMaxNumTarget(1);
@@ -285,7 +285,7 @@ public class TestPgCreation
 
 		Action sanniSpecialAtk = new Action();
 		sanniSpecialAtk.setNameAction("Quantum Debug");
-		sanniSpecialAtk.setDescriptionAction("Con un movimento rapido, Sanni attiva il Quantum Debug: una tecnica che sfrutta il potere dei bit quantistici per annullare l'esistenza stessa di un bug.\n" +
+		sanniSpecialAtk.setDescriptionAction("Con un movimento rapido, The San attiva il Quantum Debug: una tecnica che sfrutta il potere dei bit quantistici per annullare l'esistenza stessa di un bug.\n" +
 				"Un colpo che non solo rimuove il nemico, ma riscrive la sua realtà in un istante.\n" +
 				"È come se il codice nemico venisse resettato a un punto perfetto nel passato, annullando ogni traccia dell'errore.\n" +
 				"Il bug non esiste più: è stato debuggato dalla storia stessa, come se non fosse mai esistito.");
