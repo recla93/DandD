@@ -369,7 +369,7 @@ public class TestPgCreation
 		sandorPg.setAtk(25);
 		sandorPg.setDef(17);
 		sandorPg.setSpeed(20);
-		sandorPg.setImageUrl("https://i.imgur.com/nbwlqLP.png"); // URL CodeCleaner
+		sandorPg.setImageUrl("https://i.imgur.com/gCrgp9N.png"); // URL CodeCleaner
 		pDao.save(sandorPg);
 
 		Equipment sandorWeaponF  = new Equipment();
@@ -432,7 +432,7 @@ public class TestPgCreation
 		stefano.setAtk(80);
 		stefano.setDef(50);
 		stefano.setSpeed(70);
-		stefano.setImageUrl("https://i.imgur.com/VGDxEsr.png");
+		stefano.setImageUrl("https://i.imgur.com/RW7nujI.png");
 		pDao.save(stefano);
 
 		Equipment stefanoWeaponF  = new Equipment();
@@ -486,7 +486,7 @@ public class TestPgCreation
 		javlin.setDef(5);
 		javlin.setSpeed(5);
 		javlin.setDanger(Danger.UNCHECKED);
-		javlin.setImageUrl("https://imgur.com/bdgBwO6"); // URL Javlin
+		javlin.setImageUrl("https://i.imgur.com/d0NfQhC.png"); // URL Javlin
 		mDao.save(javlin);
 
 		Action graffioBase = new Action();
@@ -513,7 +513,7 @@ public class TestPgCreation
 		// --- Mostro Angulorc ---
 		Monster angulorc = new Monster();
 		angulorc.setName("Angulorc");
-		angulorc.setDescription("orchi guerrieri di Angular, attaccano usando delle String come clave, molto forti fisicamente ma poco intelligenti");
+		angulorc.setDescription("Orchi guerrieri di Angular, attaccano usando delle String come clave, molto forti fisicamente ma poco intelligenti");
 		angulorc.setDanger(Danger.CHECKED);
 		angulorc.setHp(140);
 		angulorc.setAtk(25);
@@ -546,7 +546,7 @@ public class TestPgCreation
 		Monster ogreSql = new Monster();
 		ogreSql.setName("OgreSQL"); // Nome corretto
 		ogreSql.setDanger(Danger.CHECKED);
-		ogreSql.setDescription("grossi ogre corazzati messi a guardia dei Database SQL, sono ben protetti da armature di Query, attaccano con i loro pugni");
+		ogreSql.setDescription("Grossi ogre corazzati messi a guardia dei Database SQL, sono ben protetti da armature di Query, attaccano con i loro pugni");
 		ogreSql.setHp(160);
 		ogreSql.setAtk(20);
 		ogreSql.setDef(18);
@@ -578,7 +578,7 @@ public class TestPgCreation
 		// --- Mostro Back-Ender ---
 		Monster backEnder = new Monster();
 		backEnder.setName("Back-Ender");
-		backEnder.setDescription("maestosi e misteriosi cavalieri neri, i terminatori del back end, formidabili distruttori di codice. Si vocifera che uno solo di questi, possa mandare in down il PlaystationNetwork per 1 giorno intero.");
+		backEnder.setDescription("Maestosi e misteriosi cavalieri neri, i terminatori del back end, formidabili distruttori di codice. Si vocifera che uno solo di questi, possa mandare in down il PlaystationNetwork per 1 giorno intero.");
 		backEnder.setDanger(Danger.FATALERROR);
 		backEnder.setHp(150);
 		backEnder.setAtk(40);
@@ -617,7 +617,7 @@ public class TestPgCreation
 		sourceCode.setAtk(50);
 		sourceCode.setDef(20);
 		sourceCode.setSpeed(50);
-		sourceCode.setImageUrl("https://imgur.com/sp8i0vo"); // URL CodeSource
+		sourceCode.setImageUrl("https://i.imgur.com/JiSd2Lr.png"); // URL CodeSource
 		mDao.save(sourceCode);
 
 		Action baseSource= new Action();

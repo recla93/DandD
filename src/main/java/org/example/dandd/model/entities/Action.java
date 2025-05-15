@@ -56,10 +56,7 @@ public class Action extends BaseEntity {
 				switch (actionType) {
 					case BASE: dmg = p.getAtk(); break;
 					case HEAVY:
-						if(p.getCharacterType() == CharacterType.OMNICODER)
-						{
-							return -1000;
-						}
+
 						dmg = p.getAtk() + p.getEquipments().stream()
 							.mapToInt(arma -> arma.getPlusDmg())
 							.sum();
@@ -93,6 +90,10 @@ public class Action extends BaseEntity {
 			} else if (difensore instanceof PgPlayable targetP) {
 				if (actionType == ActionType.SPECIALE && p.getCharacterType() == CharacterType.GITBARD) {
 					return -20; // Cura
+				}
+				if(actionType==ActionType.HEAVY && p.getCharacterType() == CharacterType.OMNICODER)
+				{
+					return -1000;
 				}
 			}
 		}
